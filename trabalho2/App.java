@@ -25,33 +25,34 @@ public class App {
                             if (pesqConta == Integer.parseInt(contasPj[i].getNum())) {
 
                                 JOptionPane.showMessageDialog(null,
-                                        "Seu nome: " + contasPf[i].getNome() + "\n Saldo: "
-                                                + contasPf[i].getSaldo() + "\n Numero da conta: "
-                                                + contasPf[i].getNum());
+                                        "Seu nome: " + contasPj[i].getNome() + "\n Saldo: "
+                                                + contasPj[i].getSaldo() + "\n Numero da conta: "
+                                                + contasPj[i].getNum());
                                                 contAtual = i;
-                            }
+                            
                             
                              boolean acessoConta=true;       
                             while(acessoConta){
                      int deposito;
                      int saque;
                      int emprestimo;
-                     int menuEntrar = Integer.parseInt(JOptionPane.showInputDialog(null,"1 - Depositar \n 2 - Sacar \n 3 - Emprestimo"));
+                     int menuEntrar = Integer.parseInt(JOptionPane.showInputDialog(null,"1 - Depositar \n 2 - Sacar \n 3 - Emprestimo \n 4 - Sair "));
                      switch (menuEntrar) {
                         case 1: deposito = Integer
                                 .parseInt(JOptionPane.showInputDialog(null, "Insira o valor do Saque")); 
                                        
-                        int x = Integer.parseInt(contasPf[contAtual].getSaldo()) + deposito;
-                        contasPf[contAtual].setSaldo(Integer.toString(x));
-                        JOptionPane.showMessageDialog(null,"Seu Saldo Atual = "+contasPf[contAtual].getSaldo());         
+                        int x = Integer.parseInt(contasPj[contAtual].getSaldo()) + deposito;
+                        contasPj[contAtual].setSaldo(Integer.toString(x));
+                        JOptionPane.showMessageDialog(null,"Seu Saldo Atual = "+contasPj[contAtual].getSaldo());         
 
 
                             break;
                         case 2: saque = Integer.parseInt(JOptionPane.showInputDialog(null,"Insira o valor do Saque"));
-                        if(saque<=Integer.parseInt(contasPf[contAtual].getSaldo())){
-                            Integer.parseInt(contasPf[contAtual].getSaldo()) - saque;
+                        if(saque<=Integer.parseInt(contasPj[contAtual].getSaldo())){
+                            contasPj[contAtual].setSaldo (Integer.parseInt(contasPj[contAtual].getSaldo()) - saque); 
+                            
                             JOptionPane.showMessageDialog(null,"Saque realizado com Sucesso");
-                            JOptionPane.showMessageDialog(null,"Seu Saldo Atual = "+contasPf[i].getSaldo());
+                            JOptionPane.showMessageDialog(null,"Seu Saldo Atual = "+contasPj[contAtual].getSaldo());
 
                         }else {
                              JOptionPane.showMessageDialog(null,"Saldo Insuficiente");
@@ -59,29 +60,29 @@ public class App {
                             
                             break;
                         case 3: emprestimo = Integer.parseInt(JOptionPane.showInputDialog(null,"Insira o valor do emprestimo"));
-                              if(Integer.parseInt(contasPf[i].getSaldo())<= 1000){
+                              if(Integer.parseInt(contasPj[contAtual].getSaldo())<= 1000){
                                 if(emprestimo<=2000){
-                                    integer.parseInt(contasPf[i].getSaldo() + emprestimo);
+                                   contasPj[contAtual].setSaldo (Integer.parseInt(contasPj[contAtual].getSaldo()) + emprestimo);
 
                                 }else{
                                      JOptionPane.showMessageDialog(null,"Empréstimo recusado");
 
                                 }
-                              }else if(Integer.parseInt(contasPf[i].getSaldo())<=5000){
+                              }else if(Integer.parseInt(contasPj[contAtual].getSaldo())<=5000){
                                 if(emprestimo<=10000){
-                                    integer.parseInt(contasPf[i].getSaldo() + emprestimo);
+                                    contasPj[contAtual].setSaldo (Integer.parseInt(contasPj[contAtual].getSaldo()) + emprestimo);
 
                                 }else{
                                     JOptionPane.showMessageDialog(null,"Empréstimo recusado");
                                 }
-                              }else{integer.parseInt(contasPf[i].getSaldo() + emprestimo);
+                              }else{ contasPj[contAtual].setSaldo (Integer.parseInt(contasPj[contAtual].getSaldo()) + emprestimo);
 
                               }
 
-
-
+                              break;
+                        case 4:   
                             
-
+                        acessoConta = false;
                             
                             
                             break;
@@ -143,7 +144,7 @@ public class App {
                 case 3:
                     agenciaAberta = false;
                     break;
-                default:
+                default: JOptionPane.showMessageDialog(null, " Numero nulo");
 
                     break;
             }
