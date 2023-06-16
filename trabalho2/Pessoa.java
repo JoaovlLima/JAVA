@@ -5,8 +5,20 @@ import java.lang.reflect.Constructor;
 public abstract class Pessoa {
     String nome;
     String tel;
+    
+    public String getSenha() {
+        return senha;
+    }
+
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+
     String saldo;
     String num;
+    String senha;
     
 
 //construtor
@@ -15,6 +27,7 @@ public Pessoa(String nome, String tel, String saldo, String num) {
     this.tel = tel;
     this.saldo = saldo;
     this.num = num;
+
 }
 
 
