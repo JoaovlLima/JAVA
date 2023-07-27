@@ -23,23 +23,30 @@ public class App {
             
                 
             
-            int tipo = Integer.parseInt(JOptionPane.showInputDialog(null," Escolha Seu Tipo de Animal \n 1-Cachorro\n 2-Gato\n 3-Outros\n 4-Sair"));
+            int tipo = Integer.parseInt(JOptionPane.showInputDialog(null," 1-Cadastrar Pet\n 2-Agendar consulta\n 3-Sair"));
             switch (tipo) {
                 case 1: 
-                for (int i = 0; i < cadastroCachorro.length; i++) {
-                    
-                }
-                    JOptionPane.showMessageDialog(null, "Informe suas Informações: "+cadastroCachorro[i].setProprietario(Integer.parseInt(JOptionPane.showInputDialog(null,"Nome Proprietário:")));;);
+                int acao = Integer.parseInt(JOptionPane.showInputDialog(null," 1-Cachorro\n 2-Gato\n 3-Outros"));
+                   switch (acao) {
+                    case 1:
+                        
+                        break;
+                    case 2:
+                        
+                        break;
+                         case 3:
+                        
+                        break;
+                        
+                    default:JOptionPane.showMessageDialog(null, "Numero Incorreto");
+                        break;
+                   } 
                     break;
             case 2: 
                     
                     break;
-                case 3: 
+                case 3: aberto = false;
                     
-                    break;
-                case 4: aberto = false;
-                    
-                    break;
                 default: JOptionPane.showMessageDialog(null, "Numero Incorreto");
                     break;
             }
