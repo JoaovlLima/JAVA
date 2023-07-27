@@ -15,7 +15,10 @@ public class App {
         Gato cadastroGato[] = new Gato[5];
         Outros cadastroOutros[] = new Outros[5];
         boolean aberto = true;
-        
+        int contGato = 0;
+        int contCachorro = 0;
+        int contOutro = 0;
+        JOptionPane.showMessageDialog(null, "Bem Vindo Ao Consultório")
         while (aberto) {
             
                 
