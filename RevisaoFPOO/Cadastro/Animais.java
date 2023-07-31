@@ -7,15 +7,25 @@ public abstract class Animais {
     double peso;
     String proprietario;
     String genero;
+    int cpf;
     
     
+    public int getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(int cpf) {
+        this.cpf = cpf;
+    }
+
     //métodos
     //construtor Cheio
-    public Animais(String porte, double peso, String proprietario, String genero, String especie) {
+    public Animais(String porte, double peso, String proprietario, String genero, String especie, int cpf) {
         this.porte = porte;
         this.peso = peso;
         this.proprietario = proprietario;
         this.genero = genero;
+        this.cpf = cpf;
            
     }
         //construtor Vazio 

@@ -3,8 +3,8 @@ package RevisaoFPOO.Cadastro;
 public class Cachorro extends Animais{
     String raca;
 
-    public Cachorro(String porte, double peso, String proprietario, String genero, String especie, String raca) {
-        super(porte, peso, proprietario, genero, especie);
+    public Cachorro(String porte, double peso, String proprietario, String genero, String especie, String raca, int cpf) {
+        super(porte, peso, proprietario, genero, especie, cpf);
         this.raca = raca;
     }
 
