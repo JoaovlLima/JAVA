@@ -23,8 +23,7 @@ public class App {
                             "\n 1-Pessoa Juridica"
                             + "\n 2-Pessoa Fisica"));
                     if (acaoAcesso == 1) {
-                        int pesqConta = Integer // ACESSO CONTA PJ
-                                .parseInt(JOptionPane.showInputDialog(null, "Informe seu Numero da Conta"));
+                        int pesqConta = Integer .parseInt(JOptionPane.showInputDialog(null, "Informe seu Numero da Conta"));
                         for (int i = 0; i < contasPj.length; i++) {
                             if (pesqConta == Integer.parseInt(contasPj[i].getNum())) {
 
