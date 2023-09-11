@@ -61,6 +61,7 @@ public class Calculadora extends JFrame {
         Font fonteResultado = new Font( "Serif", Font.PLAIN, 24);
         resultado.setFont(fonteResultado);
         JTextField result = new JTextField();
+        result.setFont(fonteResultado);
         // add botões
         painelText.add(result);
         painelText.add(resultado);
@@ -163,11 +164,47 @@ result.setText("");
 
    });
 
+    botaoSubtrair.addActionListener(e ->{
+operador = '-';
+memoria += num;
+num=0;
+result.setText("");
+
+   });
+
+   botaoMultiplicar.addActionListener(e ->{
+operador = '*';
+memoria += num;
+num=0;
+result.setText("");
+
+   }); 
+
+    botaoDividir.addActionListener(e ->{
+operador = '/';
+memoria += num;
+num=0;
+result.setText("");
+
+   });
+
  botaoIgual.addActionListener(e ->{
  
     switch (operador) {
         case '+':
             memoria+=num;
+            result.setText(""+memoria);
+            break;
+        case '-':
+            memoria-=num;
+            result.setText(""+memoria);
+            break;
+        case '*':
+            memoria*=num;
+            result.setText(""+memoria);
+            break;
+        case '/':
+            memoria/=num;
             result.setText(""+memoria);
             break;
     
