@@ -11,8 +11,9 @@ public class CalcCombustivel extends JFrame{
 
 /* CRIANDO PAINEIS PRINCIPAIS */
         JPanel painelRei = new JPanel(new BorderLayout());
-        painelRei.setSize(500, 500);
+        painelRei.setSize(100, 100);
         this.add(painelRei);
+
         JPanel titulo  = new JPanel();
         JPanel calc = new JPanel();
         JPanel areaBotoes = new JPanel(new BorderLayout());
@@ -28,8 +29,7 @@ public class CalcCombustivel extends JFrame{
         JPanel calcPreco = new JPanel();
         calcPreco.setLayout(new GridLayout(2, 1));
 
-        JPanel resultado = new JPanel();
-        
+        JPanel resultado = new JPanel(new GridLayout(2,1));
         JPanel botoes = new JPanel();
         
         areaBotoes.add(resultado, BorderLayout.WEST);
@@ -44,16 +44,19 @@ public class CalcCombustivel extends JFrame{
 
 /* Criando componentes */
        /* Area titulo */
+       Font fontTitulo = new Font("Serif", Font.PLAIN, 20);
        JLabel titulo1 = new JLabel("Calculo de Combustivel");
+       titulo1.setFont(fontTitulo);
       
        /* Area Calculo */    
        int tamanhoInput = 20;
        Font fontInput = new Font( "Serif", Font.PLAIN, 20);
        Font fontLabel = new Font( "Serif", Font.PLAIN, 15);
+       Font fontInputResult = new Font( "Serif", Font.PLAIN, 40);
        
-       JLabel titDistancia = new JLabel("Distância Percorrida");
-       JLabel titConsumo = new JLabel("Consumo Médio");
-       JLabel titPreco = new JLabel("Preço Litro");
+       JLabel titDistancia = new JLabel("Distância Percorrida:");
+       JLabel titConsumo = new JLabel("Consumo Médio:");
+       JLabel titPreco = new JLabel("Preço Litro:");
 
         JPanel espInputDist = new JPanel(new GridBagLayout());
         JPanel espInputCons = new JPanel(new GridBagLayout());
@@ -87,7 +90,7 @@ public class CalcCombustivel extends JFrame{
        
        /* Area Botão */
 
-       JLabel LabelResult = new JLabel("Resultado");
+       JLabel LabelResult = new JLabel("Resultado:");
        JTextField inputResult = new JTextField(tamanhoInput);
        inputResult.setFont(fontInput);
 
@@ -120,6 +123,7 @@ public class CalcCombustivel extends JFrame{
        
 this.setDefaultCloseOperation(2);
 this.pack();
+this.setResizable(false);
 this.setVisible(true);
 
     }
