@@ -1,47 +1,49 @@
 import java.util.List;
+
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
 public class OperacoesAgenda {
-private List<Usuario> usuarios;
-private DefaultTableModel tableModel;
-private JTable table;
-public OperacoesUsuarios(List<Usuario> usuarios, DefaultTableModel tableModel, JTable
-table) {
-this.usuarios = usuarios;
-this.tableModel = tableModel;
-this.table = table;
-}
-public void cadastrarUsuario(String nome, String idade) {
-int idadeInt = Integer.parseInt(idade);
-Usuario usuario = new Usuario(nome, idadeInt);
-usuarios.add(usuario);
-atualizarTabela();
-}
-public void atualizarUsuario(int linhaSelecionada, String nome, String idade) {
-if (linhaSelecionada != -1) {
-int idadeInt = Integer.parseInt(idade);
-Usuario usuario = new Usuario(nome, idadeInt);
-usuarios.set(linhaSelecionada, usuario);
-atualizarTabela();
-}
-}
-public void apagarUsuario(int linhaSelecionada) {
-if (linhaSelecionada != -1) {
-usuarios.remove(linhaSelecionada);
-atualizarTabela();
-}
-}
-public void apagarTodosUsuarios() {
-usuarios.clear();
-atualizarTabela();
-}
-public void salvarUsuarios() {
-Serializacao.serializar("dados.txt", usuarios);
-}
-private void atualizarTabela() {
-tableModel.setRowCount(0);
-for (Usuario usuario : usuarios) {
-tableModel.addRow(new Object[] { usuario.getNome(), usuario.getIdade() });
-}
-}
+    private List<Agendamento> agendamentos;
+    private DefaultTableModel tableModel;
+    private JTable table;
+
+    public OperacoesAgenda(List<Agendamento> agendamentos, DefaultTableModel tableModel, JTable table) {
+        this.agendamentos = agendamentos;
+        this.tableModel = tableModel;
+        this.table = table;
+    }
+
+    public void cadastrarAgendamento(String data, String hora, Usuario usuarios, String descricao) {
+        Agendamento agendamento = new Agendamento(data, hora, usuarios, descricao);
+        agendamentos.add(agendamento);
+        atualizarTabela();
+        
+    }
+
+    public void atualizarAgendamento(int linhaSelecionada, String data, String hora, Usuario usuarios, String descricao) {
+        if (linhaSelecionada != -1) {
+            Agendamento agendamento = new Agendamento(data, hora, usuarios, descricao);
+            agendamentos.set(linhaSelecionada, agendamento);
+            atualizarTabela();
+        }
+    }
+
+    public void apagarAgendamento(int linhaSelecionada) {
+        if (linhaSelecionada != -1) {
+            agendamentos.remove(linhaSelecionada);
+            atualizarTabela();
+        }
+    }
+
+    // public void salvarUsuarios() {
+    //     Serializacao.serializar("dados.txt", usuarios);
+    // }
+
+    private void atualizarTabela() {
+        tableModel.setRowCount(0);
+        for (Agendamento agendamento : agendamentos) {
+            tableModel.addRow(new Object[] { agendamento.getData(), agendamento.getHora(), agendamento.getUsuario(), agendamento.getDescricao() });
+        }
+    }
 }

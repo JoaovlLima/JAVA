@@ -1,24 +1,24 @@
 import java.io.Serializable;
 
 public class Agendamento implements Serializable {
-    private String nome;
+    private Usuario usuario;
     private String data;
     private String hora;
     private String descricao;
     
-    public Agendamento(String nome, String data, String hora, String descricao) {
-        this.nome = nome;
+    public Agendamento(Usuario usuario, String data, String hora, String descricao) {
+        this.usuario = usuario;
         this.data = data;
         this.hora = hora;
         this.descricao = descricao;
     }
 
-    public String getNome() {
-        return nome;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     public String getData() {
