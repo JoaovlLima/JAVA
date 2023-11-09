@@ -71,4 +71,53 @@ public class ConnectionDAO {
             ConnectionFactory.closeConnection(this.connection);
         }
     }
+
+    public void apagarID(int id) {
+        // Define a instrução SQL parametrizada para apagar dados por ID
+        String sql = "DELETE FROM Minha_Tabela WHERE ID = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            stmt.executeUpdate(); // Executa a instrução SQL
+            System.out.println("Dado apagado com sucesso");
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao apagar dados no banco de dados.", e);
+        } finally {
+            ConnectionFactory.closeConnection(this.connection);
+        }
+    }
+
+    public void atualizarID(int id, String novoNome, String novoEmail) {
+        // Define a instrução SQL parametrizada para atualizar dados por ID
+        String sql = "UPDATE MINHA_TABELA SET nome = ?, email = ? WHERE ID = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, novoNome);
+            stmt.setString(2, novoEmail);
+            stmt.setInt(3, id);
+            stmt.executeUpdate(); // Executa a instrução SQL
+            System.out.println("Dados atualizados com sucesso");
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao atualizar dados no banco de dados.", e);
+        } finally {
+            ConnectionFactory.closeConnection(this.connection);
+        }
+    }
+
+    public void listarTodos() {
+        ResultSet rs = null;
+        // Define a instrução SQL para selecionar todos os registros da tabela
+        String sql = "SELECT * FROM minha_tabela";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            rs = stmt.executeQuery(); // Executa a consulta e obtém resultados
+            while (rs.next()) {
+                System.out.println("\nid : " + rs.getInt("id") +
+                        " nome: " + rs.getString("nome") +
+                        " email: " + rs.getString("email"));
+
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        } finally {
+            ConnectionFactory.closeConnection(connection);
+        }
+    }
 }
