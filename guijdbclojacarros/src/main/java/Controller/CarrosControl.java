@@ -5,6 +5,7 @@ import java.util.List;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import Connection.CarrosDAO;
 import Model.Carros;
 
 public class CarrosControl {
@@ -43,5 +44,36 @@ public JTable getTable() {
 
 public void setTable(JTable table) {
     this.table = table;
+
+    new CarrosDAO().criaTabela();
+    atualizarTabela();  
+}
+
+
+private void atualizarTabela(){
+    tableModel.setRowCount(0);
+    carros = new CarrosDAO().listarTodos();
+    for (Carros carro : carros) {
+        tableModel.addRow(new Object[]{carro.getMarca(), carro.getModelo(), carro.getAno(), carro.getPlaca(), carro.getValor()});
+    }
+
+
+}
+public void cadastrar(String Marca, String Modelo, String ano, String placa, String Valor){
+    new CarrosDAO().cadastrar(Marca, Modelo, ano,placa, Valor);
+    atualizarTabela();
+}
+public void apagar(String placa){
+    new CarrosDAO().apagar(placa);
+    atualizarTabela();
+}
+
+public void atualizar(String Marca, String Modelo, String ano,String placa, String Valor){
+    new CarrosDAO().atualizar(Marca, Modelo, ano, placa , Valor);
+    atualizarTabela();
+}
+public void limpar(String Marca, String Modelo, String ano,String placa, String Valor){
+  
+    atualizarTabela();
 }
 }

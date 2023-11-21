@@ -15,6 +15,8 @@ add(jTPane);
 // tab1 carros
 CarrosPainel tab1 = new CarrosPainel();
 jTPane.add("Carros", tab1);
+VendasView tab2 = new VendasView();
+jTPane.add("Venda",tab2);
 setBounds(100, 100, 600, 600);
 setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 }
