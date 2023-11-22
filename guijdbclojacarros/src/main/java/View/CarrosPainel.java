@@ -22,6 +22,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+
 import Model.Carros;
 
 public class CarrosPainel extends JPanel {
@@ -98,6 +99,7 @@ table.addMouseListener(new MouseAdapter() {
             carAnoField.setText((String) table.getValueAt(linhaSelecionada,2)) ;
             carPlacaField.setText((String) table.getValueAt(linhaSelecionada,3)) ;
             carValorField.setText((String) table.getValueAt(linhaSelecionada,4)) ;
+            carPlacaField.setEditable(false);
         }
     }
 });
