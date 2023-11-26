@@ -1,5 +1,6 @@
 package Connection;
 
+import java.sql.Timestamp;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,7 +23,7 @@ public class VendaDAO {
 
     // criar Tabela
     public void criaTabela() {
-        String sql = "CREATE TABLE IF NOT EXISTS vendas_lojacarros (MARCA VARCHAR(255),MODELO VARCHAR(255),PLACA VARCHAR(255) PRIMARY KEY,NOME VARCHAR(255))";
+        String sql = "CREATE TABLE IF NOT EXISTS vendas_lojacarros (MARCA VARCHAR(255),MODELO VARCHAR(255),PLACA VARCHAR(255) PRIMARY KEY,COMPRADOR VARCHAR(255),DATA TIMESTAMP)";
         try (Statement stmt = this.connection.createStatement()) {
             stmt.execute(sql);
             System.out.println("Tabela criada com sucesso.");
@@ -57,7 +58,8 @@ public class VendaDAO {
                         rs.getString("marca"),
                         rs.getString("modelo"),
                         rs.getString("placa"),
-                         rs.getString("comprador"));
+                         rs.getString("comprador"),
+                         rs.getTimestamp("data"));
                         
                 vendas.add(venda); // Adiciona o objeto Carros à lista de carros
             }
@@ -72,19 +74,20 @@ public class VendaDAO {
     }
 
     // Cadastrar Carro no banco
-    public void cadastrar(String marca, String modelo, String placa, String comprador) {
+    public void cadastrar(String marca, String modelo, String placa, String comprador, Timestamp data) {
         PreparedStatement stmt = null;
         // Define a instrução SQL parametrizada para cadastrar na tabela
-        String sql = "INSERT INTO vendas_lojacarros (marca, modelo, placa, comprador) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO vendas_lojacarros (marca, modelo, placa, comprador,data) VALUES (?, ?, ?, ?, ?)";
         try {
             stmt = connection.prepareStatement(sql);
             stmt.setString(1, marca);
             stmt.setString(2, modelo);
             stmt.setString(3, placa);
-            stmt.setString(3, comprador);
+            stmt.setString(4, comprador);
+            stmt.setTimestamp(5, data );
             
             stmt.executeUpdate();
-            System.out.println("Dados inseridos com sucesso");
+            System.out.println("Dados insweridos com sucesso");
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao inserir dados no banco de dados.", e);
         } finally {
@@ -102,7 +105,7 @@ public class VendaDAO {
             stmt.setString(1, marca);
             stmt.setString(2, modelo);
             stmt.setString(3, placa);
-            stmt.setString(3, comprador);
+            stmt.setString(4, comprador);
             
             stmt.executeUpdate();
             System.out.println("Dados atualizados com sucesso");

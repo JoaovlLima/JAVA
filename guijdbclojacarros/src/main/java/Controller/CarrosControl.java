@@ -46,11 +46,11 @@ public void setTable(JTable table) {
     this.table = table;
 
     new CarrosDAO().criaTabela();
-    atualizarTabela();  
+    atualizarTabelaCar();  
 }
 
 
-private void atualizarTabela(){
+private void atualizarTabelaCar(){
     tableModel.setRowCount(0);
     carros = new CarrosDAO().listarTodos();
     for (Carros carro : carros) {
@@ -61,19 +61,19 @@ private void atualizarTabela(){
 }
 public void cadastrar(String Marca, String Modelo, String ano, String placa, String Valor){
     new CarrosDAO().cadastrar(Marca, Modelo, ano,placa, Valor);
-    atualizarTabela();
+    atualizarTabelaCar();
 }
 public void apagar(String placa){
     new CarrosDAO().apagar(placa);
-    atualizarTabela();
+    atualizarTabelaCar();
 }
 
 public void atualizar(String Marca, String Modelo, String ano,String placa, String Valor){
     new CarrosDAO().atualizar(Marca, Modelo, ano, placa , Valor);
-    atualizarTabela();
+    atualizarTabelaCar();
 }
 public void limpar(String Marca, String Modelo, String ano,String placa, String Valor){
   
-    atualizarTabela();
+    atualizarTabelaCar();
 }
 }

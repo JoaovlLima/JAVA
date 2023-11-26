@@ -58,7 +58,8 @@ public class CarrosDAO {
                         rs.getString("modelo"),
                         rs.getString("ano"),
                         rs.getString("placa"),
-                        rs.getString("valor"));
+                        rs.getString("valor"),
+                        rs.getString("situacao"));
                 carros.add(carro); // Adiciona o objeto Carros à lista de carros
             }
         } catch (SQLException ex) {
@@ -128,6 +129,20 @@ public class CarrosDAO {
             throw new RuntimeException("Erro ao apagar dados no banco de dados.", e);
         } finally {
             ConnectionFactory.closeConnection(connection, stmt);
+        }
+    }
+
+    public void atualizarSituacao(String placa, String situacao) {
+        String sql = "UPDATE carros_lojacarros SET situacao = ? WHERE placa = ?";
+        try (PreparedStatement stmt = this.connection.prepareStatement(sql)) {
+            stmt.setString(1, situacao);
+            stmt.setString(2, placa);
+            stmt.executeUpdate();
+            System.out.println("Situação do carro atualizada para 'Vendido'.");
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao atualizar a situação do carro: " + e.getMessage(), e);
+        } finally {
+            ConnectionFactory.closeConnection(this.connection);
         }
     }
 }

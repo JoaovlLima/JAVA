@@ -46,11 +46,11 @@ public void setTable(JTable table) {
     this.table = table;
 
     new ClienteDAO().criaTabela();
-    atualizarTabela();  
+    atualizarTabelaCli();  
 }
 
 
-private void atualizarTabela(){
+private void atualizarTabelaCli(){
     tableModel.setRowCount(0);
     clientes = new ClienteDAO().listarTodos();
     for (Clientes cliente : clientes) {
@@ -61,19 +61,19 @@ private void atualizarTabela(){
 }
 public void cadastrar(String Nome, String Email, String cpf){
     new ClienteDAO().cadastrar(Nome, Email, cpf);
-    atualizarTabela();
+    atualizarTabelaCli();
 }
 public void apagar(String cpf){
     new ClienteDAO().apagar(cpf);
-    atualizarTabela();
+    atualizarTabelaCli();
 }
 
 public void atualizar(String Nome, String Email, String cpf){
     new ClienteDAO().atualizar(Nome, Email, cpf);
-    atualizarTabela();
+    atualizarTabelaCli();
 }
 public void limpar(String Nome, String Email, String cpf){
   
-    atualizarTabela();
+    atualizarTabelaCli();
 }
 }

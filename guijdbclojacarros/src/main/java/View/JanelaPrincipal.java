@@ -29,7 +29,8 @@ public class JanelaPrincipal extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         jTPane.addChangeListener(e -> {
-            tab2.atualizarVendas();
+            tab2.atualizarVendasCli();
+            tab2.atualizarVendasCar();
         });
     }
 
