@@ -61,7 +61,7 @@ private void atualizarTabelaCar(){
     tableModel.setRowCount(0);
     carros = new CarrosDAO().listarTodos();
     for (Carros carro : carros) {
-        tableModel.addRow(new Object[]{carro.getMarca(), carro.getModelo(), carro.getAno(), carro.getPlaca(), carro.getValor(), carro.getSituacao()});
+        tableModel.addRow(new Object[]{carro.getMarca(), carro.getModelo(), carro.getAno(), carro.getPlaca(), carro.getValor()/* , carro.getSituacao() */});
     }
 }
 

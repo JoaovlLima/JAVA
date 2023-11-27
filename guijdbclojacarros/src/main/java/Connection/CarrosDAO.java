@@ -22,7 +22,7 @@ public class CarrosDAO {
 
     // criar Tabela
     public void criaTabela() {
-        String sql = "CREATE TABLE IF NOT EXISTS carros_lojacarros (MARCA VARCHAR(255),MODELO VARCHAR(255),ANO VARCHAR(255),PLACA VARCHAR(255) PRIMARY KEY, VALOR VARCHAR(255), SITUACAO VARCHAR(255))";
+        String sql = "CREATE TABLE IF NOT EXISTS carros_lojacarros (MARCA VARCHAR(255),MODELO VARCHAR(255),ANO VARCHAR(255),PLACA VARCHAR(255) PRIMARY KEY, VALOR VARCHAR(255))";
         try (Statement stmt = this.connection.createStatement()) {
             stmt.execute(sql);
             System.out.println("Tabela criada com sucesso.");
@@ -58,8 +58,8 @@ public class CarrosDAO {
                         rs.getString("modelo"),
                         rs.getString("ano"),
                         rs.getString("placa"),
-                        rs.getString("valor"),
-                        rs.getString("situacao"));
+                        rs.getString("valor"));
+                    /*     rs.getString("situacao")) */
                 carros.add(carro); // Adiciona o objeto Carros à lista de carros
             }
         } catch (SQLException ex) {

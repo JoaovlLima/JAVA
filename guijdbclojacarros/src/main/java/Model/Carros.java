@@ -8,16 +8,16 @@ private String modelo;
 private String ano;
 private String placa;
 private String valor;
-private String situacao;
+/* private String situacao; */
 
 
-public Carros(String marca, String modelo, String ano, String placa, String valor, String situacao) {
+public Carros(String marca, String modelo, String ano, String placa, String valor/* , String situacao */) {
     this.marca = marca;
     this.modelo = modelo;
     this.ano = ano;
     this.placa = placa;
     this.valor = valor;
-    this.situacao = situacao;
+    /* this.situacao = situacao; */
 }
 
 
@@ -71,7 +71,7 @@ public void setValor(String valor) {
 }
 
 
-public String getSituacao() {
+/* public String getSituacao() {
     return situacao;
 }
 
@@ -79,7 +79,7 @@ public String getSituacao() {
 public void setSituacao(String situacao) {
     this.situacao = situacao;
 }
-
+ */
 
 
 
