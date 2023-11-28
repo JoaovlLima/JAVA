@@ -8,21 +8,21 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import Connection.ConnectionFactory;
-import Model.Produtos;
+import Model.ClientesVip;
 
-public class ProdutosDAO {
+public class ClientesVipDAO {
     // atributo
     private Connection connection;
-    private List<Produtos> produtos;
+    private List<ClientesVip> clientesVip;
 
     // construtor
-    public ProdutosDAO() {
+    public ClientesVipDAO() {
         this.connection = ConnectionFactory.getConnection();
     }
 
     // criar Tabela
     public void criaTabela() {
-        String sql = "CREATE TABLE IF NOT EXISTS produto_mercado (NOME VARCHAR(255),CODIGO VARCHAR(255) PRIMARY KEY,DESCRICAO VARCHAR(255),PRECO VARCHAR(255), QUANTIDADE VARCHAR(255))";
+        String sql = "CREATE TABLE IF NOT EXISTS cliente_vip_mercado (NOME VARCHAR(255),CPF VARCHAR(14) PRIMARY KEY)";
         try (Statement stmt = this.connection.createStatement()) {
             stmt.execute(sql);
             System.out.println("Tabela criada com sucesso.");
@@ -37,15 +37,15 @@ public class ProdutosDAO {
     }
 
     // Listar todos os valores cadastrados
-    public List<Produtos> listarTodos() {
+    public List<ClientesVip> listarTodos() {
         PreparedStatement stmt = null;
         // Declaração do objeto PreparedStatement para executar a consulta
         ResultSet rs = null;
         // Declaração do objeto ResultSet para armazenar os resultados da consulta
-        produtos = new ArrayList<>();
+        clientesVip = new ArrayList<>();
         // Cria uma lista para armazenar os carros recuperados do banco de dados
         try {
-            stmt = connection.prepareStatement("SELECT * FROM produto_mercado");
+            stmt = connection.prepareStatement("SELECT * FROM cliente_vip_mercado");
             // Prepara a consulta SQL para selecionar todos os registros da tabela
             rs = stmt.executeQuery();
             // Executa a consulta e armazena os resultados no ResultSet
@@ -53,14 +53,11 @@ public class ProdutosDAO {
                 // Para cada registro no ResultSet, cria um objeto Carros com os valores do
                 // registro
 
-                Produtos produto = new Produtos(
+                ClientesVip cliente = new ClientesVip(
                         rs.getString("nome"),
-                        rs.getString("codigo"),
-                        rs.getString("descricao"),
-                        rs.getString("preco"),
-                        rs.getString("quantidade"));
-                 
-                    Produtos.add(produto); // Adiciona o objeto Carros à lista de carros
+                        rs.getString("cpf"));
+
+                ClientesVip.add(cliente); // Adiciona o objeto Carros à lista de carros
             }
         } catch (SQLException ex) {
             System.out.println(ex); // Em caso de erro durante a consulta, imprime o erro
@@ -69,21 +66,18 @@ public class ProdutosDAO {
 
             // Fecha a conexão, o PreparedStatement e o ResultSet
         }
-        return produtos; // Retorna a lista de carros recuperados do banco de dados
+        return clientesVip; // Retorna a lista de carros recuperados do banco de dados
     }
 
     // Cadastrar Carro no banco
-    public void cadastrar(String nome, String codigo, String descricao, String preco, String quantidade) {
+    public void cadastrar(String nome, String cpf) {
         PreparedStatement stmt = null;
         // Define a instrução SQL parametrizada para cadastrar na tabela
-        String sql = "INSERT INTO produto_mercado (nome, codigo, descricao, preco, quantidade) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO cliente_vip_mercado (nome, cpf) VALUES (?, ?)";
         try {
             stmt = connection.prepareStatement(sql);
             stmt.setString(1, nome);
-            stmt.setString(2, codigo);
-            stmt.setString(3, descricao);
-            stmt.setString(4, preco);
-            stmt.setString(5, quantidade);
+            stmt.setString(2, cpf);
             stmt.executeUpdate();
             System.out.println("Dados inseridos com sucesso");
         } catch (SQLException e) {
@@ -94,17 +88,14 @@ public class ProdutosDAO {
     }
 
     // Atualizar dados no banco
-    public void atualizar(String nome, String codigo, String descricao, String preco, String quantidade) {
+    public void Atualizar(String nome, String cpf) {
         PreparedStatement stmt = null;
         // Define a instrução SQL parametrizada para atualizar dados pela placa
-        String sql = "UPDATE produto_mercado SET nome = ?, descricao = ?, preco = ?, quantidade = ? WHERE codigo = ?";
+        String sql = "UPDATE cliente_vip_mercado SET nome = ? WHERE cpf = ?";
         try {
             stmt = connection.prepareStatement(sql);
             stmt.setString(1, nome);
-            stmt.setString(2, descricao);
-            stmt.setString(3, preco);
-            stmt.setString(4, quantidade);
-            stmt.setString(5, codigo);
+            stmt.setString(2, cpf);
             stmt.executeUpdate();
             System.out.println("Dados atualizados com sucesso");
         } catch (SQLException e) {
@@ -115,13 +106,13 @@ public class ProdutosDAO {
     }
 
     // Apagar dados do banco
-    public void apagar(String codigo) {
+    public void apagar(String cpf) {
         PreparedStatement stmt = null;
-        // Define a instrução SQL parametrizada para apagar dados pelo codigo
-        String sql = "DELETE FROM produto_mercado WHERE codigo = ?";
+        // Define a instrução SQL parametrizada para apagar dados pelo cpf
+        String sql = "DELETE FROM cliente_vip_mercado WHERE cpf = ?";
         try {
             stmt = connection.prepareStatement(sql);
-            stmt.setString(1, codigo);
+            stmt.setString(1, cpf);
             stmt.executeUpdate(); // Executa a instrução SQL
             System.out.println("Dado apagado com sucesso");
         } catch (SQLException e) {
