@@ -43,7 +43,7 @@ public class ClientesVipController {
 
     // Método para atualizar os dados de um cliente no banco de dados
     public void atualizar(String nome, String cpf) {
-        new ClientesVipDAO().atualizar(nome, cpf);
+        new ClientesVipDAO().Atualizar(nome, cpf);
         // Chama o método de atualização no banco de dados
         atualizarTabela(); // Atualiza a tabela de exibição após a atualização
     }

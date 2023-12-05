@@ -60,7 +60,7 @@ public class ProdutosDAO {
                         rs.getString("preco"),
                         rs.getString("quantidade"));
                  
-                    Produtos.add(produto); // Adiciona o objeto Carros à lista de carros
+                    produtos.add(produto); // Adiciona o objeto Carros à lista de carros
             }
         } catch (SQLException ex) {
             System.out.println(ex); // Em caso de erro durante a consulta, imprime o erro
