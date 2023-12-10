@@ -68,7 +68,6 @@ public class ProdutosPainel extends JPanel {
         botoes.add(limpar = new JButton("Limpar"));
         add(botoes);
 
-
         // tabela de carros
         JScrollPane jSPane = new JScrollPane();
         add(jSPane);
