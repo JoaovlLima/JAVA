@@ -27,7 +27,7 @@ public class ClientesVipController {
         // Obtém os carros atualizados do banco de dados
         for (ClientesVip clientes : clientesVip) {
             // Adiciona os dados de cada carro como uma nova linha na tabela Swing
-            tableModel.addRow(new Object[] { clientes.getNome(), clientes.getCpf()});
+            tableModel.addRow(new Object[] { clientes.getNome(), clientes.getCpf() });
         }
     }
 
@@ -55,7 +55,12 @@ public class ClientesVipController {
         atualizarTabela(); // Atualiza a tabela de exibição após a exclusão
     }
 
-    public void desconto(String cpfDesconto){
-        
+    public void limpar(String Nome, String cpf) {
+
+        atualizarTabela();
+    }
+
+    public void desconto(String cpfDesconto) {
+
     }
 }

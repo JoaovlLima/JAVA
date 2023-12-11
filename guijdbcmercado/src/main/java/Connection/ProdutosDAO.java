@@ -130,4 +130,66 @@ public class ProdutosDAO {
             ConnectionFactory.closeConnection(connection, stmt);
         }
     }
-}
+        // Obtém a quantidade de um produto pelo código
+        public int obterQuantidade(String codigo) {
+            PreparedStatement stmt = null;
+            ResultSet rs = null;
+            int quantidade = 0;
+    
+            try {
+                String sql = "SELECT quantidade FROM produto_mercado WHERE codigo = ?";
+                stmt = connection.prepareStatement(sql);
+                stmt.setString(1, codigo);
+                rs = stmt.executeQuery();
+    
+                if (rs.next()) {
+                    quantidade = rs.getInt("quantidade");
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException("Erro ao obter a quantidade do produto.", e);
+            } finally {
+                // Não feche a conexão aqui, mantenha-a aberta para uso posterior
+                closeStatementAndResultSet(stmt, rs);
+            }
+    
+            return quantidade;
+        }
+        
+        public void atualizarQuantidade(String codigo, String quantidade) {
+            PreparedStatement stmt = null;
+            String sql = "UPDATE produto_mercado SET quantidade = ? WHERE codigo = ?";
+            try {
+                stmt = connection.prepareStatement(sql);
+                stmt.setString(1, quantidade);
+                stmt.setString(2, codigo);
+                stmt.executeUpdate();
+                System.out.println("Quantidade atualizada com sucesso");
+            } catch (SQLException e) {
+                throw new RuntimeException("Erro ao atualizar quantidade no banco de dados.", e);
+            } finally {
+                ConnectionFactory.closeConnection(connection, stmt);
+            }
+        }
+
+        // Método para fechar PreparedStatement e ResultSet
+        private void closeStatementAndResultSet(PreparedStatement stmt, ResultSet rs) {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (SQLException e) {
+                // Lida com qualquer erro ao fechar os recursos
+                e.printStackTrace();
+            }
+        }
+    
+        // Método para fechar a conexão
+        public void fecharConexao() {
+            ConnectionFactory.closeConnection(connection);
+        }
+    }
+    
+

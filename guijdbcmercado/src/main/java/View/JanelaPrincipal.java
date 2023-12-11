@@ -24,6 +24,8 @@ public class JanelaPrincipal extends JFrame {
         painelRei.add("Compras", tab1);
         ProdutosPainel tab2 = new ProdutosPainel();
         painelRei.add("Produtos", tab2);
+        ClientesVipPainel tab3 = new ClientesVipPainel();
+        painelRei.add("Clientes VIP", tab3);
         setBounds(100, 100, 600, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

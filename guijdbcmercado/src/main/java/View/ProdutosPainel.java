@@ -98,22 +98,14 @@ public class ProdutosPainel extends JPanel {
         ProdutosController operacoes = new ProdutosController(produtos, tableModel, table);
 
         cadastrar.addActionListener(e -> {
-            if (prodNomeField.getText().isEmpty() || prodCodigoField.getText().isEmpty()
-                    || prodDescricaoField.getText().isEmpty() || prodPrecoField.getText().isEmpty()
-                    || prodQuantidadeField.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Preencha Todos os Campos", "Aviso", JOptionPane.WARNING_MESSAGE);
-            } else {
+            operacoes.cadastrar(prodNomeField.getText(), prodCodigoField.getText(), prodDescricaoField.getText(),
+                    prodPrecoField.getText(), prodQuantidadeField.getText());
 
-                operacoes.cadastrar(prodNomeField.getText(), prodCodigoField.getText(), prodDescricaoField.getText(),
-                        prodPrecoField.getText(), prodQuantidadeField.getText());
-
-                prodNomeField.setText("");
-                prodCodigoField.setText("");
-                prodDescricaoField.setText("");
-                prodPrecoField.setText("");
-                prodQuantidadeField.setText("");
-
-            }
+            prodNomeField.setText("");
+            prodCodigoField.setText("");
+            prodDescricaoField.setText("");
+            prodPrecoField.setText("");
+            prodQuantidadeField.setText("");
         });
         editar.addActionListener(e -> {
             if (prodNomeField.getText().isEmpty() || prodCodigoField.getText().isEmpty()
@@ -165,18 +157,15 @@ public class ProdutosPainel extends JPanel {
 
         });
 
-        
-        
-        
-
     }
-    
-private void atualizarTabela(){
-            tableModel.setRowCount(0);
-            produtos = new ProdutosDAO().listarTodos();
-            for (Produtos produto : produtos) {
-                // Adiciona os dados de cada carro como uma nova linha na tabela Swing
-        tableModel.addRow(new Object[] { produto.getNome(), produto.getCodigo(), produto.getDescricao(), produto.getPreco(), produto.getQuantidade() });
-            }
-            }
+
+    private void atualizarTabela() {
+        tableModel.setRowCount(0);
+        produtos = new ProdutosDAO().listarTodos();
+        for (Produtos produto : produtos) {
+            // Adiciona os dados de cada carro como uma nova linha na tabela Swing
+            tableModel.addRow(new Object[] { produto.getNome(), produto.getCodigo(), produto.getDescricao(),
+                    produto.getPreco(), produto.getQuantidade() });
+        }
+    }
 }
