@@ -74,6 +74,7 @@ public class ComprasController {
 
         // Exemplo de utilização: Adicionando produtos ao carrinho
         novaCompra.adicionarProduto("1001", "2");
+         novaCompra.adicionarProduto("1002", "1");
         
 
         // Exibindo os produtos no carrinho (pode ser substituído pela lógica da sua view)

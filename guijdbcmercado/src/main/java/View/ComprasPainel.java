@@ -36,6 +36,8 @@ public class ComprasPainel extends JPanel {
     // Compra
     private JPanel compraPanelTop;
     private JPanel compraPanelBottom;
+    private JPanel compraPanelBtn;
+    private JPanel compraPanelTotal;
     // Apenas teste, depois precisa excluir
     private JPanel teste;
     // Labels
@@ -43,6 +45,7 @@ public class ComprasPainel extends JPanel {
     private JLabel descProd;
     private JLabel precoProd;
     private JLabel qtdeProd;
+    private JLabel valorTotal;
     // Botões
     private JButton comprarBtn;
     private JButton finalizarCompraBtn;
@@ -61,9 +64,7 @@ public class ComprasPainel extends JPanel {
     private int linhaSelecionada = -1;
 
     // Outras Variaveis
-    private String nome;
-    private String desc;
-    private String preco;
+    private String total = "00,00";
     private String quantidadeAtual = "1";
 
     private ComprasController novaCompra;
@@ -87,15 +88,18 @@ public class ComprasPainel extends JPanel {
         descInfo = new JPanel();
         compraPanelTop = new JPanel();
         compraPanelBottom = new JPanel();
+        compraPanelBtn = new JPanel();
+        compraPanelTotal = new JPanel();
         novaCompra = new ComprasController();
 
         teste = new JPanel();
 
         // Declarando as Labels
-        nomeProd = new JLabel("Nome: " + nome);
-        descProd = new JLabel("Descricação: " + desc);
-        precoProd = new JLabel("Preço: " + preco);
+        nomeProd = new JLabel("Nome: ");
+        descProd = new JLabel("Descricação: ");
+        precoProd = new JLabel("Preço: R$ ");
         qtdeProd = new JLabel("Quantidade: ");
+        valorTotal = new JLabel("Valor Total: R$ " + total);
 
         // Declarando os botões
         comprarBtn = new JButton("Comprar");
@@ -195,8 +199,13 @@ public class ComprasPainel extends JPanel {
 
         jSPane1.setViewportView(tableCompra);
 
-        compraPanelBottom.add(finalizarCompraBtn);
-        compraPanelBottom.add(removerCompraBtn);
+        compraPanelBottom.setLayout(new BorderLayout());
+        compraPanelBottom.add(compraPanelBtn,BorderLayout.CENTER);
+        compraPanelBottom.add(compraPanelTotal,BorderLayout.NORTH);
+        compraPanelTotal.setLayout(new GridLayout());
+        compraPanelBtn.add(finalizarCompraBtn);
+        compraPanelBtn.add(removerCompraBtn);
+        compraPanelTotal.add(valorTotal);
 
         rightPanel.setLayout(new GridLayout(2, 1));
         rightPanel.add(compraPanelTop);
@@ -211,10 +220,14 @@ public class ComprasPainel extends JPanel {
             public void mouseClicked(MouseEvent evt) {
                 linhaSelecionada = tableProd.rowAtPoint(evt.getPoint());
                 if (linhaSelecionada != -1) {
-                    nome = (String) tableProd.getValueAt(linhaSelecionada, 0);
-                    desc = (String) tableProd.getValueAt(linhaSelecionada, 1);
-                    preco = (String) tableProd.getValueAt(linhaSelecionada, 2);
-                    quantidadeAtual = (String) tableProd.getValueAt(linhaSelecionada, 3);
+                    String nome = (String) tableProd.getValueAt(linhaSelecionada, 0);
+                    String descricao = (String) tableProd.getValueAt(linhaSelecionada, 2);
+                    String preco = (String) tableProd.getValueAt(linhaSelecionada, 3);
+                    String quantidade = (String) tableProd.getValueAt(linhaSelecionada, 4);
+
+                    nomeProd.setText("Nome: " + nome);
+                    descProd.setText("Descrição: " + descricao);
+                    precoProd.setText("Preço: R$ " + preco);
                 }
             }
         });
@@ -223,61 +236,59 @@ public class ComprasPainel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int linhaSelecionada = tableProd.getSelectedRow();
-        
+
                 // Verifica se alguma linha foi selecionada
                 if (linhaSelecionada != -1) {
                     // Obtém os dados da linha selecionada na tabela de produtos
                     String nome = tableProd.getValueAt(linhaSelecionada, 0).toString();
                     String codigo = tableProd.getValueAt(linhaSelecionada, 1).toString();
-        
+
                     // Obtém a quantidade desejada do JSpinner
                     int quantidadeSelecionada = (int) qtdeSpinner.getValue();
-        
+
                     // Adiciona os dados à tabela do carrinho
                     DefaultTableModel carrinhoTableModel = (DefaultTableModel) tableCompra.getModel();
-                    carrinhoTableModel.addRow(new Object[]{nome, codigo, quantidadeSelecionada});
-        
-                   
+                    carrinhoTableModel.addRow(new Object[] { nome, codigo, quantidadeSelecionada });
+
                 } else {
                     JOptionPane.showMessageDialog(null, "Selecione um produto para comprar.");
                 }
             }
         });
-        
+
         finalizarCompraBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Obtendo a lista de produtos no carrinho
                 DefaultTableModel carrinhoTableModel = (DefaultTableModel) tableCompra.getModel();
                 int rowCount = carrinhoTableModel.getRowCount();
-        
+
                 // Verificando se há produtos no carrinho antes de prosseguir
                 if (rowCount == 0) {
-                    JOptionPane.showMessageDialog(null, "Seu carrinho está vazio. Adicione produtos antes de finalizar a compra.");
+                    JOptionPane.showMessageDialog(null,
+                            "Seu carrinho está vazio. Adicione produtos antes de finalizar a compra.");
                     return; // Retorna caso o carrinho esteja vazio
                 }
-        
+
                 // Adicionando os produtos ao carrinho e atualizando as quantidades
                 for (int i = 0; i < rowCount; i++) {
                     String nome = carrinhoTableModel.getValueAt(i, 0).toString();
                     String codigo = carrinhoTableModel.getValueAt(i, 1).toString();
                     int quantidade = Integer.parseInt(carrinhoTableModel.getValueAt(i, 2).toString());
-        
+
                     // Adiciona os produtos ao carrinho
                     novaCompra.adicionarProduto(codigo, String.valueOf(quantidade));
-        
+
                     // Atualiza as quantidades no banco de dados
                     novaCompra.atualizarQuantidadesNoBanco();
                 }
-        
+
                 // Limpar o carrinho após finalizar a compra (se necessário)
                 carrinhoTableModel.setRowCount(0);
             }
         });
-        
+
     }
-      
-    
 
     private void atualizarTabela() {
         tableModel.setRowCount(0);
@@ -289,5 +300,4 @@ public class ComprasPainel extends JPanel {
         }
     }
 
-    
 }

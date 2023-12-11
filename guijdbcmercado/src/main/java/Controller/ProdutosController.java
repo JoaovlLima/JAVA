@@ -8,6 +8,7 @@ import javax.swing.table.DefaultTableModel;
 
 import Model.Produtos;
 import Connection.ProdutosDAO;
+import Exception.*;
 
 public class ProdutosController {
     private List<Produtos> produtos;
@@ -65,15 +66,21 @@ public class ProdutosController {
             if (!(nome.isEmpty() || Codigo.isEmpty()
                     || Descricao.isEmpty() || Preco.isEmpty()
                     || Quantidade.isEmpty())) {
-                        if(Codigo.toLowerCase().matches("[A-Z]\\[A]"))
-                new ProdutosDAO().cadastrar(nome, Codigo, Descricao, Preco, Quantidade);
-                atualizarTabelaProd();
+                if (!(Codigo.toUpperCase().matches("[A-Z]"))) {
+                    new ProdutosDAO().cadastrar(nome, Codigo, Descricao, Preco, Quantidade);
+                    atualizarTabelaProd();
+                } else {
+                    throw new CodeFormatException("Código Inválido. Por favor preencha utilizando somente números.");
+                }
             } else {
                 throw new NullPointerException("Informações inválidas. Por favor preencha as informações vazias.");
             }
         } catch (NullPointerException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Aviso",
-            JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.WARNING_MESSAGE);
+        } catch (CodeFormatException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Aviso",
+                    JOptionPane.WARNING_MESSAGE);
         }
 
     }

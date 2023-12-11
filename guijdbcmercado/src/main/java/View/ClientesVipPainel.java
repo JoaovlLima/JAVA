@@ -36,7 +36,7 @@ public class ClientesVipPainel extends JPanel {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         add(new JLabel("Cadastro produtos"));
         JPanel inputPanel = new JPanel();
-        inputPanel.setLayout(new GridLayout(6, 2));
+        inputPanel.setLayout(new GridLayout(2, 2));
         inputPanel.add(new JLabel("Nome"));
         nomeField = new JTextField(20);
         inputPanel.add(nomeField);

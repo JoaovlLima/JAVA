@@ -137,6 +137,7 @@ public class ProdutosDAO {
             int quantidade = 0;
     
             try {
+                
                 String sql = "SELECT quantidade FROM produto_mercado WHERE codigo = ?";
                 stmt = connection.prepareStatement(sql);
                 stmt.setString(1, codigo);

@@ -1,0 +1,37 @@
+Frame Compras
+Este frame parece ser responsável por exibir uma lista de produtos disponíveis para compra e permitir que o usuário adicione produtos a um carrinho de compras. Algumas funcionalidades notáveis incluem:
+
+Exibição de uma tabela com detalhes dos produtos disponíveis.
+Uma área para exibir detalhes do produto selecionado, como nome, descrição, preço, e a capacidade de definir a quantidade desejada através de um JSpinner.
+Botão "Comprar" para adicionar produtos selecionados ao carrinho.
+Um painel lateral que mostra os produtos adicionados ao carrinho, com opções para finalizar a compra ou remover produtos do carrinho.
+Lógica para atualizar a quantidade de produtos no banco de dados após a finalização da compra.
+Considerações para clientes VIP, onde um sistema de desconto pode ser implementado.
+
+
+Frame ClientesVip
+Este frame está relacionado ao gerenciamento de clientes VIP. Algumas características incluem:
+
+Exibição de uma lista de clientes VIP em uma tabela.
+Funcionalidades para cadastrar, atualizar e apagar clientes VIP.
+Interface que permite a manipulação dos dados do cliente VIP, como nome e CPF.
+
+Frame Produtos
+Este frame trata das operações relacionadas aos produtos disponíveis. Suas funcionalidades são:
+
+Exibição de uma tabela com detalhes dos produtos, como nome, código, descrição, preço e quantidade.
+Funcionalidades para cadastrar, atualizar e apagar produtos.
+Lógica para obter e atualizar a quantidade de produtos no banco de dados.
+
+Frame ComprasController
+Embora não seja exatamente um frame, parece ser uma classe responsável por controlar as operações relacionadas ao carrinho de compras. Algumas funcionalidades incluem:
+
+Adicionar produtos ao carrinho.
+Visualizar e imprimir os produtos no carrinho.
+Atualizar as quantidades de produtos no banco de dados após a compra.
+
+
+Considerações Gerais
+Os códigos incluem interações com um banco de dados para persistência dos dados relacionados a clientes, produtos e compras.
+Utilização de conexões seguras e parametrizadas para evitar injeção de SQL.
+Manipulação de tabelas no banco de dados para criar, listar, atualizar e apagar registros.
