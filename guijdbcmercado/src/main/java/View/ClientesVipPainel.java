@@ -34,7 +34,7 @@ public class ClientesVipPainel extends JPanel {
         super();
         // entrada de dados
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        add(new JLabel("Cadastro produtos"));
+        add(new JLabel("Cadastro Clientes"));
         JPanel inputPanel = new JPanel();
         inputPanel.setLayout(new GridLayout(2, 2));
         inputPanel.add(new JLabel("Nome"));
@@ -50,9 +50,10 @@ public class ClientesVipPainel extends JPanel {
         botoes.add(editar = new JButton("Editar"));
         botoes.add(apagar = new JButton("Apagar"));
         botoes.add(limpar = new JButton("Limpar"));
+        editar.setEnabled(false);
         add(botoes);
 
-        // tabela de carros
+        // tabela de clientes
         JScrollPane jSPane = new JScrollPane();
         add(jSPane);
         tableModel = new DefaultTableModel(new Object[][] {},
@@ -71,7 +72,12 @@ public class ClientesVipPainel extends JPanel {
                 if (linhaSelecionada != -1) {
                     nomeField.setText((String) table.getValueAt(linhaSelecionada, 0));
                     cpfField.setText((String) table.getValueAt(linhaSelecionada, 1));
-
+                    cadastrar.setEnabled(false);
+                    cpfField.setEditable(false);
+                    editar.setEnabled(true);
+                } else {
+                    cadastrar.setEnabled(true);
+                    cpfField.setEditable(true);
                 }
             }
         });
@@ -79,28 +85,22 @@ public class ClientesVipPainel extends JPanel {
         ClientesVipController operacoes = new ClientesVipController(clientesVips, tableModel, table);
 
         cadastrar.addActionListener(e -> {
-            if (nomeField.getText().isEmpty() || cpfField.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Preencha Todos os Campos", "Aviso", JOptionPane.WARNING_MESSAGE);
-            } else {
+            operacoes.cadastrar(nomeField.getText(), cpfField.getText());
 
-                operacoes.cadastrar(nomeField.getText(), cpfField.getText());
-
-                nomeField.setText("");
-                cpfField.setText("");
-            }
+            nomeField.setText("");
+            cpfField.setText("");
         });
+
         editar.addActionListener(e -> {
-            if (nomeField.getText().isEmpty() || cpfField.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Preencha Todos os Campos", "Aviso", JOptionPane.WARNING_MESSAGE);
-            } else {
 
-                operacoes.atualizar(nomeField.getText(), cpfField.getText());
+            operacoes.atualizar(nomeField.getText(), cpfField.getText());
 
-                nomeField.setText("");
-                cpfField.setText("");
+            nomeField.setText("");
+            cpfField.setText("");
 
-            }
-
+            cadastrar.setEnabled(true);
+            cpfField.setEditable(true);
+            table.clearSelection();
         });
         apagar.addActionListener(e -> {
 
@@ -112,19 +112,25 @@ public class ClientesVipPainel extends JPanel {
 
                 nomeField.setText("");
                 cpfField.setText("");
-
+                cadastrar.setEnabled(true);
+                cpfField.setEditable(true);
+                editar.setEnabled(false);
+                table.clearSelection();
             } else {
 
             }
 
         });
-        
+
         limpar.addActionListener(e -> {
             operacoes.limpar(nomeField.getText(), cpfField.getText());
 
             nomeField.setText("");
             cpfField.setText("");
-
+            cadastrar.setEnabled(true);
+            cpfField.setEditable(true);
+            editar.setEnabled(false);
+            table.clearSelection();
         });
 
     }
@@ -132,9 +138,9 @@ public class ClientesVipPainel extends JPanel {
     private void atualizarTabela() {
         tableModel.setRowCount(0);
         clientesVips = new ClientesVipDAO().listarTodos();
-        for (ClientesVip cliente : clientesVips) {
+        for (ClientesVip clientes : clientesVips) {
             // Adiciona os dados de cada carro como uma nova linha na tabela Swing
-            tableModel.addRow(new Object[] { cliente.getNome(), cliente.getCpf()});
+            tableModel.addRow(new Object[] { clientes.getNome(), clientes.getCpf() });
         }
     }
 }

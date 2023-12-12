@@ -62,37 +62,74 @@ public class ProdutosController {
 
     public void cadastrar(String nome, String Codigo, String Descricao, String Preco, String Quantidade) {
         try {
+            if (!(nome.isEmpty() || Codigo.isEmpty() || Descricao.isEmpty() || Preco.isEmpty()
+                    || Quantidade.isEmpty())) {
+                int verificarCodigo = Integer.parseInt(Codigo);
+                int verificarQtde = Integer.parseInt(Quantidade);
+                if (verificarCodigo >= 1000) {
+                    produtos = new ProdutosDAO().listarTodos();
+                    boolean codigoJaExiste = false;
+
+                    for (Produtos produto : produtos) {
+                        if (verificarCodigo == Integer.parseInt(produto.getCodigo())) {
+                            codigoJaExiste = true;
+                            break; // O código já está cadastrado, então podemos parar de procurar
+                        }
+                    }
+
+                    if (!codigoJaExiste) {
+                        new ProdutosDAO().cadastrar(nome, Codigo, Descricao, Preco, Quantidade);
+                        atualizarTabelaProd();
+                    } else {
+                        throw new CodeFormatException("Código já existe. Por favor, utilize um código diferente.");
+                    }
+                } else {
+                    throw new CodeFormatException(
+                            "Código Inválido. Por favor, preencha um código válido acima de 1000.");
+                }
+            } else {
+                throw new NullPointerException("Informações inválidas. Por favor, preencha as informações vazias.");
+            }
+        } catch (NullPointerException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Aviso", JOptionPane.WARNING_MESSAGE);
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(null,
+                    "Informações Inválidas. Por favor, preencha utilizando somente números.",
+                    "Aviso", JOptionPane.WARNING_MESSAGE);
+        } catch (CodeFormatException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Aviso", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    public void apagar(String codigo) {
+        try {
+            if (!(codigo.isEmpty())) {
+                new ProdutosDAO().apagar(codigo);
+                atualizarTabelaProd();
+            } else {
+                throw new NullPointerException("Erro de Seleção, por favor selecione uma linha.");
+            }
+        } catch (NullPointerException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Aviso",
+                    JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    public void atualizar(String nome, String Codigo, String Descricao, String Preco, String Quantidade) {
+        try {
 
             if (!(nome.isEmpty() || Codigo.isEmpty()
                     || Descricao.isEmpty() || Preco.isEmpty()
                     || Quantidade.isEmpty())) {
-                if (!(Codigo.toUpperCase().matches("[A-Z]"))) {
-                    new ProdutosDAO().cadastrar(nome, Codigo, Descricao, Preco, Quantidade);
-                    atualizarTabelaProd();
-                } else {
-                    throw new CodeFormatException("Código Inválido. Por favor preencha utilizando somente números.");
-                }
+                new ProdutosDAO().atualizar(nome, Codigo, Descricao, Preco, Quantidade);
+                atualizarTabelaProd();
             } else {
                 throw new NullPointerException("Informações inválidas. Por favor preencha as informações vazias.");
             }
         } catch (NullPointerException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Aviso",
                     JOptionPane.WARNING_MESSAGE);
-        } catch (CodeFormatException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "Aviso",
-                    JOptionPane.WARNING_MESSAGE);
         }
-
-    }
-
-    public void apagar(String placa) {
-        new ProdutosDAO().apagar(placa);
-        atualizarTabelaProd();
-    }
-
-    public void atualizar(String nome, String Codigo, String Descricao, String Preco, String Quantidade) {
-        new ProdutosDAO().atualizar(nome, Codigo, Descricao, Preco, Quantidade);
-        atualizarTabelaProd();
     }
 
     public void limpar(String nome, String Codigo, String Descricao, String Preco, String Quantidade) {

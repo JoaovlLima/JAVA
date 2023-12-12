@@ -16,7 +16,7 @@ import Connection.ProdutosDAO;
 import Controller.ComprasController;
 
 public class ComprasPainel extends JPanel {
-
+private ProdutosDAO produtosDAO;
     // JPanels
     // Principal
     private JPanel mainPanel;
@@ -60,7 +60,8 @@ public class ComprasPainel extends JPanel {
     private List<Compras> compras;
     private JTable tableProd;
     private JTable tableCompra;
-    private DefaultTableModel tableModel;
+    private DefaultTableModel tableModelProd;
+    private DefaultTableModel tableModelCar;
     private int linhaSelecionada = -1;
 
     // Outras Variaveis
@@ -71,7 +72,7 @@ public class ComprasPainel extends JPanel {
 
     public ComprasPainel() {
         super();
-
+        produtosDAO = new ProdutosDAO();
         // Declarando os painéis
         mainPanel = new JPanel();
         topPanel = new JPanel();
@@ -127,9 +128,9 @@ public class ComprasPainel extends JPanel {
         // tabela de produtos
         JScrollPane jSPane = new JScrollPane();
         topPanel.add(jSPane);
-        tableModel = new DefaultTableModel(new Object[][] {},
+        tableModelProd = new DefaultTableModel(new Object[][] {},
                 new String[] { "Nome", "Código", "Descrição", "preço", "Quantidade" });
-        tableProd = new JTable(tableModel);
+        tableProd = new JTable(tableModelProd);
         jSPane.setViewportView(tableProd);
 
         // Define a largura das colunas
@@ -187,8 +188,8 @@ public class ComprasPainel extends JPanel {
         JScrollPane jSPane1 = new JScrollPane();
         compraPanelTop.add(jSPane1);
 
-        tableModel = new DefaultTableModel(new Object[][] {}, new String[] { "Nome", "Codigo", "Quantidade" });
-        tableCompra = new JTable(tableModel);
+        tableModelCar = new DefaultTableModel(new Object[][] {}, new String[] { "Nome", "Codigo", "Quantidade" });
+        tableCompra = new JTable(tableModelCar);
 
         // Define a largura das colunas
         tableCompra.getColumnModel().getColumn(0).setPreferredWidth(100); // Coluna "Nome"
@@ -200,8 +201,8 @@ public class ComprasPainel extends JPanel {
         jSPane1.setViewportView(tableCompra);
 
         compraPanelBottom.setLayout(new BorderLayout());
-        compraPanelBottom.add(compraPanelBtn,BorderLayout.CENTER);
-        compraPanelBottom.add(compraPanelTotal,BorderLayout.NORTH);
+        compraPanelBottom.add(compraPanelBtn, BorderLayout.CENTER);
+        compraPanelBottom.add(compraPanelTotal, BorderLayout.NORTH);
         compraPanelTotal.setLayout(new GridLayout());
         compraPanelBtn.add(finalizarCompraBtn);
         compraPanelBtn.add(removerCompraBtn);
@@ -243,17 +244,25 @@ public class ComprasPainel extends JPanel {
                     String nome = tableProd.getValueAt(linhaSelecionada, 0).toString();
                     String codigo = tableProd.getValueAt(linhaSelecionada, 1).toString();
 
+                   
                     // Obtém a quantidade desejada do JSpinner
                     int quantidadeSelecionada = (int) qtdeSpinner.getValue();
+                    int quantidadeAtual = produtosDAO.obterQuantidade(codigo);
+                    int novaQuantidade = quantidadeAtual-quantidadeSelecionada;
+                    // Atualiza a quantidade no banco de dados antes de adicionar ao carrinho
+                     new ProdutosDAO().atualizarQuantidade(codigo,
+                     String.valueOf(novaQuantidade));
 
                     // Adiciona os dados à tabela do carrinho
                     DefaultTableModel carrinhoTableModel = (DefaultTableModel) tableCompra.getModel();
                     carrinhoTableModel.addRow(new Object[] { nome, codigo, quantidadeSelecionada });
+                    atualizarTabelaProd();
 
                 } else {
                     JOptionPane.showMessageDialog(null, "Selecione um produto para comprar.");
                 }
             }
+
         });
 
         finalizarCompraBtn.addActionListener(new ActionListener() {
@@ -275,29 +284,35 @@ public class ComprasPainel extends JPanel {
                     String nome = carrinhoTableModel.getValueAt(i, 0).toString();
                     String codigo = carrinhoTableModel.getValueAt(i, 1).toString();
                     int quantidade = Integer.parseInt(carrinhoTableModel.getValueAt(i, 2).toString());
+                    System.out.println("codigo" + codigo + "    quantidade: " + quantidade);
 
                     // Adiciona os produtos ao carrinho
                     novaCompra.adicionarProduto(codigo, String.valueOf(quantidade));
-
+                    System.out.println(novaCompra);
                     // Atualiza as quantidades no banco de dados
-                    novaCompra.atualizarQuantidadesNoBanco();
+                    /* novaCompra.atualizarQuantidadesNoBanco(); */
                 }
 
                 // Limpar o carrinho após finalizar a compra (se necessário)
                 carrinhoTableModel.setRowCount(0);
+                spinnerModel.setValue(0);
             }
         });
 
     }
 
     private void atualizarTabela() {
-        tableModel.setRowCount(0);
+        tableModelProd.setRowCount(0);
         produtos = new ProdutosDAO().listarTodos();
         for (Produtos produto : produtos) {
             // Adiciona os dados de cada carro como uma nova linha na tabela Swing
-            tableModel.addRow(new Object[] { produto.getNome(), produto.getCodigo(), produto.getDescricao(),
+            tableModelProd.addRow(new Object[] { produto.getNome(), produto.getCodigo(), produto.getDescricao(),
                     produto.getPreco(), produto.getQuantidade() });
         }
+    }
+
+    public void atualizarTabelaProd() {
+        atualizarTabela();
     }
 
 }

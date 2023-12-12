@@ -29,10 +29,11 @@ public class JanelaPrincipal extends JFrame {
         setBounds(100, 100, 600, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-      /*   painelRei.addChangeListener(e -> {
-            tab2.atualizarVendasCli();
-            tab2.atualizarVendasCar();
-        }); */
+        painelRei.addChangeListener(e -> {
+            tab1.atualizarTabelaProd();
+            tab2.atualizarTabelaProd2();
+           
+        });
     }
 
     // métodos para tornar a janela visível

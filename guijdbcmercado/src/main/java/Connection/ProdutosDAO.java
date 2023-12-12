@@ -134,7 +134,7 @@ public class ProdutosDAO {
         public int obterQuantidade(String codigo) {
             PreparedStatement stmt = null;
             ResultSet rs = null;
-            int quantidade = 0;
+            int quantidadeAtual = 0;
     
             try {
                 
@@ -144,22 +144,25 @@ public class ProdutosDAO {
                 rs = stmt.executeQuery();
     
                 if (rs.next()) {
-                    quantidade = rs.getInt("quantidade");
+                    quantidadeAtual = Integer.parseInt(rs.getString("quantidade"));
                 }
             } catch (SQLException e) {
                 throw new RuntimeException("Erro ao obter a quantidade do produto.", e);
             } finally {
-                // Não feche a conexão aqui, mantenha-a aberta para uso posterior
+                
                 closeStatementAndResultSet(stmt, rs);
             }
-    
-            return quantidade;
+            System.out.println("bancoQuant:"+quantidadeAtual);
+            return quantidadeAtual;
+            
         }
         
         public void atualizarQuantidade(String codigo, String quantidade) {
             PreparedStatement stmt = null;
+            
             String sql = "UPDATE produto_mercado SET quantidade = ? WHERE codigo = ?";
             try {
+                System.out.println("codigo:" + codigo + " quantidade: " + quantidade);
                 stmt = connection.prepareStatement(sql);
                 stmt.setString(1, quantidade);
                 stmt.setString(2, codigo);
@@ -168,9 +171,17 @@ public class ProdutosDAO {
             } catch (SQLException e) {
                 throw new RuntimeException("Erro ao atualizar quantidade no banco de dados.", e);
             } finally {
-                ConnectionFactory.closeConnection(connection, stmt);
+                if (stmt != null) {
+                    try {
+                        stmt.close();
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                }
             }
         }
+        
+        
 
         // Método para fechar PreparedStatement e ResultSet
         private void closeStatementAndResultSet(PreparedStatement stmt, ResultSet rs) {

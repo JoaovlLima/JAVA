@@ -91,6 +91,16 @@ public class ProdutosPainel extends JPanel {
                     prodPrecoField.setText((String) table.getValueAt(linhaSelecionada, 3));
                     prodQuantidadeField.setText((String) table.getValueAt(linhaSelecionada, 4));
 
+                    prodCodigoField.setEditable(false);
+                    cadastrar.setEnabled(false);
+                    editar.setEnabled(true);
+                } else {
+                    // Ativa o textfield da placa
+                    prodCodigoField.setEditable(true);
+                    // Ativa o botão
+                    cadastrar.setEnabled(true);
+
+                    editar.setEnabled(false);
                 }
             }
         });
@@ -106,24 +116,21 @@ public class ProdutosPainel extends JPanel {
             prodDescricaoField.setText("");
             prodPrecoField.setText("");
             prodQuantidadeField.setText("");
+
         });
         editar.addActionListener(e -> {
-            if (prodNomeField.getText().isEmpty() || prodCodigoField.getText().isEmpty()
-                    || prodDescricaoField.getText().isEmpty() || prodPrecoField.getText().isEmpty()
-                    || prodQuantidadeField.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Preencha Todos os Campos", "Aviso", JOptionPane.WARNING_MESSAGE);
-            } else {
 
-                operacoes.atualizar(prodNomeField.getText(), prodCodigoField.getText(), prodDescricaoField.getText(),
-                        prodPrecoField.getText(), prodQuantidadeField.getText());
+            operacoes.atualizar(prodNomeField.getText(), prodCodigoField.getText(), prodDescricaoField.getText(),
+                    prodPrecoField.getText(), prodQuantidadeField.getText());
 
-                prodNomeField.setText("");
-                prodCodigoField.setText("");
-                prodDescricaoField.setText("");
-                prodPrecoField.setText("");
-                prodQuantidadeField.setText("");
-
-            }
+            prodNomeField.setText("");
+            prodCodigoField.setText("");
+            prodDescricaoField.setText("");
+            prodPrecoField.setText("");
+            prodQuantidadeField.setText("");
+            cadastrar.setEnabled(true);
+            prodCodigoField.setEditable(true);
+            table.clearSelection();
 
         });
         apagar.addActionListener(e -> {
@@ -139,9 +146,6 @@ public class ProdutosPainel extends JPanel {
                 prodDescricaoField.setText("");
                 prodPrecoField.setText("");
                 prodQuantidadeField.setText("");
-
-            } else {
-
             }
 
         });
@@ -155,6 +159,10 @@ public class ProdutosPainel extends JPanel {
             prodPrecoField.setText("");
             prodQuantidadeField.setText("");
 
+            prodCodigoField.setEditable(true);
+            cadastrar.setEnabled(true);
+            editar.setEnabled(false);
+            table.clearSelection();
         });
 
     }
@@ -167,5 +175,9 @@ public class ProdutosPainel extends JPanel {
             tableModel.addRow(new Object[] { produto.getNome(), produto.getCodigo(), produto.getDescricao(),
                     produto.getPreco(), produto.getQuantidade() });
         }
+    }
+
+    public void atualizarTabelaProd2() {
+        atualizarTabela();
     }
 }

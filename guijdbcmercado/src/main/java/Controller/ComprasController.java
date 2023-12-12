@@ -1,9 +1,16 @@
 package Controller;
 
 import java.util.List;
+import java.util.Map;
+
+import javax.swing.JOptionPane;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import Connection.ProdutosDAO;
+import Model.Produtos;
+import View.ComprasPainel;
 
 class Compras {
     private String codigo;
@@ -25,6 +32,7 @@ class Compras {
 
 public class ComprasController {
     private List<Compras> comprado;
+    private List<Produtos> produtos;
     private ProdutosDAO produtosDAO; // Movido para o escopo da classe
 
     public ComprasController() {
@@ -47,40 +55,58 @@ public class ComprasController {
         }
     }
 
-    public void atualizarQuantidadesNoBanco() {
-        for (Compras compra : comprado) {
-            String codigoProduto = compra.getCodigo();
-            String quantidadeComprada = compra.getQuantidade();
+    public void atualizarQuantidadesNoBanco(String codigo) {
+        // Obtendo a lista de produtos no carrinho
+        List<Compras> comprasNoCarrinho = getProdutosNoCarrinho();
+
+        // Verificando se há produtos no carrinho antes de prosseguir
+        if (comprasNoCarrinho.isEmpty()) {
+            JOptionPane.showMessageDialog(null,
+                    "Seu carrinho está vazio. Adicione produtos antes de finalizar a compra.");
+            return; // Retorna se o carrinho estiver vazio
+        }
+
+        // Itera sobre os produtos no carrinho para atualizar as quantidades no banco
+        for (Compras compra : comprasNoCarrinho) {
+             String codigoProduto = compra.getCodigo();
+            int quantidadeComprada = Integer.parseInt(compra.getQuantidade());
 
             // Obtém a quantidade atual do produto no banco de dados
-            int quantidadeAtual = produtosDAO.obterQuantidade(codigoProduto);
+             int quantidadeAtual = produtosDAO.obterQuantidade(codigoProduto);
 
             // Verifica se há estoque suficiente para a compra
-            if (quantidadeAtual >= Integer.parseInt(quantidadeComprada)) {
-                // Calcula a nova quantidade após a compra
-                int novaQuantidade = quantidadeAtual - Integer.parseInt(quantidadeComprada);
 
-                // Atualiza a quantidade no banco de dados
-                produtosDAO.atualizarQuantidade(codigoProduto,String.valueOf(novaQuantidade));
-            } else {
-                System.out.println("Estoque insuficiente para o produto: " + codigoProduto);
-                // Aqui você pode lidar com a situação de estoque insuficiente, se necessário
-            }
+           
+             if (quantidadeAtual >= quantidadeComprada) {
+             int novaQuantidade = quantidadeAtual - quantidadeComprada;
+
+            // // Atualiza a quantidade no banco de dados
+             produtosDAO.atualizarQuantidade(codigoProduto,
+             String.valueOf(novaQuantidade));
+             } else {
+             System.out.println("Estoque insuficiente para o produto: " + codigoProduto);
+            // // Lógica para lidar com estoque insuficiente, se necessário
+             }
         }
+
+        ComprasPainel comprasPainel = new ComprasPainel(); // Instancia a classe ComprasPainel (ou use a instância
+                                                           // existente, se aplicável)
+        comprasPainel.atualizarTabelaProd(); // Chama o método para atualizar a tabela na classe ComprasPainel
     }
 
     public static void main(String[] args) {
         ComprasController novaCompra = new ComprasController();
 
         // Exemplo de utilização: Adicionando produtos ao carrinho
-        novaCompra.adicionarProduto("1001", "2");
-         novaCompra.adicionarProduto("1002", "1");
-        
+        novaCompra.adicionarProduto("1001", "10");
+        novaCompra.adicionarProduto("1002", "10");
+        novaCompra.adicionarProduto("1003", "10");
 
-        // Exibindo os produtos no carrinho (pode ser substituído pela lógica da sua view)
+        // Exibindo os produtos no carrinho (pode ser substituído pela lógica da sua
+        // view)
         novaCompra.imprimirProdutosNoCarrinho();
 
         // Atualizar as quantidades no banco de dados
-        novaCompra.atualizarQuantidadesNoBanco();
+        // novaCompra.atualizarQuantidadesNoBanco();
     }
 }
