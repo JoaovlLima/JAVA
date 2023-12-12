@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.MaskFormatter;
 
 import Model.Compras;
 import Model.Produtos;

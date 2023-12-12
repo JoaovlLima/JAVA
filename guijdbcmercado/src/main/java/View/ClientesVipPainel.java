@@ -8,6 +8,7 @@ import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -15,6 +16,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.MaskFormatter;
 
 import Connection.ClientesVipDAO;
 import Controller.ClientesVipController;
@@ -29,6 +31,9 @@ public class ClientesVipPainel extends JPanel {
     private DefaultTableModel tableModel;
     private int linhaSelecionada = -1;
 
+    // MaskFormatter
+    private MaskFormatter cpfFormatter;
+
     // Construtor(GUI-JPanel)
     public ClientesVipPainel() {
         super();
@@ -41,7 +46,13 @@ public class ClientesVipPainel extends JPanel {
         nomeField = new JTextField(20);
         inputPanel.add(nomeField);
         inputPanel.add(new JLabel("CPF"));
-        cpfField = new JTextField(20);
+        try {
+            cpfFormatter = new MaskFormatter("###.###.###-##");
+            cpfField = new JFormattedTextField(cpfFormatter);
+            cpfField.setColumns(10);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
         inputPanel.add(cpfField);
         add(inputPanel);
 

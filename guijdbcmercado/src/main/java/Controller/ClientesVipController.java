@@ -39,29 +39,26 @@ public class ClientesVipController {
     public void cadastrar(String nome, String cpf) {
         try {
             if (!(nome.isEmpty() || cpf.isEmpty())) {
-                if (cpf.matches("\\d{3}.\\d{3}.\\d{3}-\\d{2}")) {
-                    clientesVip = new ClientesVipDAO().listarTodos();
-                    boolean cpfJaCadastrado = false;
 
-                    for (ClientesVip clientes : clientesVip) {
-                        if (cpf.equals(clientes.getCpf())) {
-                            cpfJaCadastrado = true;
-                            break; // CPF já está cadastrado, então podemos parar de procurar
-                        }
+                clientesVip = new ClientesVipDAO().listarTodos();
+                boolean cpfJaCadastrado = false;
+
+                for (ClientesVip clientes : clientesVip) {
+                    if (cpf.equals(clientes.getCpf())) {
+                        cpfJaCadastrado = true;
+                        break; // CPF já está cadastrado, então podemos parar de procurar
                     }
-
-                    if (!cpfJaCadastrado) {
-                        new ClientesVipDAO().cadastrar(nome, cpf);
-                        // Chama o método de cadastro no banco de dados
-
-                        atualizarTabela(); // Atualiza a tabela de exibição após o cadastro
-                    } else {
-                        throw new CpfValidationException("CPF já cadastrado. Por favor, digite um novo CPF.");
-                    }
-                } else {
-                    throw new CpfValidationException(
-                            "CPF inválido. Por favor, digite um número de CPF válido.\n\nExemplo: 123.456.789-99");
                 }
+
+                if (!cpfJaCadastrado) {
+                    new ClientesVipDAO().cadastrar(nome, cpf);
+                    // Chama o método de cadastro no banco de dados
+
+                    atualizarTabela(); // Atualiza a tabela de exibição após o cadastro
+                } else {
+                    throw new CpfValidationException("CPF já cadastrado. Por favor, digite um novo CPF.");
+                }
+
             } else {
                 throw new NullPointerException("Informações inválidas. Por favor, preencha as informações vazias.");
             }
@@ -69,6 +66,8 @@ public class ClientesVipController {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Aviso", JOptionPane.WARNING_MESSAGE);
         } catch (CpfValidationException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Aviso", JOptionPane.WARNING_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Erro não identificado.", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -85,6 +84,8 @@ public class ClientesVipController {
         } catch (NullPointerException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Aviso",
                     JOptionPane.WARNING_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Erro não identificado.", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -101,6 +102,8 @@ public class ClientesVipController {
         } catch (NullPointerException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Aviso",
                     JOptionPane.WARNING_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Erro não identificado.", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
     }
 

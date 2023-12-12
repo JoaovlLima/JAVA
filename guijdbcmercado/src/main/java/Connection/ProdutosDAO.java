@@ -152,7 +152,6 @@ public class ProdutosDAO {
                 
                 closeStatementAndResultSet(stmt, rs);
             }
-            System.out.println("bancoQuant:"+quantidadeAtual);
             return quantidadeAtual;
             
         }
@@ -162,7 +161,6 @@ public class ProdutosDAO {
             
             String sql = "UPDATE produto_mercado SET quantidade = ? WHERE codigo = ?";
             try {
-                System.out.println("codigo:" + codigo + " quantidade: " + quantidade);
                 stmt = connection.prepareStatement(sql);
                 stmt.setString(1, quantidade);
                 stmt.setString(2, codigo);

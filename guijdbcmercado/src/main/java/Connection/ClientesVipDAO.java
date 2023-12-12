@@ -39,34 +39,23 @@ public class ClientesVipDAO {
     // Listar todos os valores cadastrados
     public List<ClientesVip> listarTodos() {
         PreparedStatement stmt = null;
-        // Declaração do objeto PreparedStatement para executar a consulta
         ResultSet rs = null;
-        // Declaração do objeto ResultSet para armazenar os resultados da consulta
         clientesVip = new ArrayList<>();
-        // Cria uma lista para armazenar os carros recuperados do banco de dados
         try {
             stmt = connection.prepareStatement("SELECT * FROM cliente_vip_mercado");
-            // Prepara a consulta SQL para selecionar todos os registros da tabela
             rs = stmt.executeQuery();
-            // Executa a consulta e armazena os resultados no ResultSet
             while (rs.next()) {
-                // Para cada registro no ResultSet, cria um objeto Carros com os valores do
-                // registro
-
                 ClientesVip cliente = new ClientesVip(
                         rs.getString("nome"),
                         rs.getString("cpf"));
-
-                ClientesVip.add(cliente); // Adiciona o objeto Carros à lista de carros
+                clientesVip.add(cliente); // Corrigido para adicionar à lista clientesVip
             }
         } catch (SQLException ex) {
-            System.out.println(ex); // Em caso de erro durante a consulta, imprime o erro
+            System.out.println(ex);
         } finally {
             ConnectionFactory.closeConnection(connection, stmt, rs);
-
-            // Fecha a conexão, o PreparedStatement e o ResultSet
         }
-        return clientesVip; // Retorna a lista de carros recuperados do banco de dados
+        return clientesVip;
     }
 
     // Cadastrar Carro no banco

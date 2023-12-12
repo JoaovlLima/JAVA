@@ -98,6 +98,8 @@ public class ProdutosController {
                     "Aviso", JOptionPane.WARNING_MESSAGE);
         } catch (CodeFormatException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Aviso", JOptionPane.WARNING_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Erro não identificado.", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -112,6 +114,8 @@ public class ProdutosController {
         } catch (NullPointerException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Aviso",
                     JOptionPane.WARNING_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Erro não identificado.", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -129,6 +133,8 @@ public class ProdutosController {
         } catch (NullPointerException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Aviso",
                     JOptionPane.WARNING_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Erro não identificado.", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
     }
 
