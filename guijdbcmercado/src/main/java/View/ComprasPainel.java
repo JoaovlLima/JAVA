@@ -17,7 +17,7 @@ import Connection.ProdutosDAO;
 import Controller.ComprasController;
 
 public class ComprasPainel extends JPanel {
-private ProdutosDAO produtosDAO;
+    private ProdutosDAO produtosDAO;
     // JPanels
     // Principal
     private JPanel mainPanel;
@@ -67,7 +67,7 @@ private ProdutosDAO produtosDAO;
 
     // Outras Variaveis
     private String total = "00,00";
-    private String quantidadeAtual = "1";
+    private String quantidadeAtual = "0";
 
     private ComprasController novaCompra;
 
@@ -109,7 +109,7 @@ private ProdutosDAO produtosDAO;
         removerCompraBtn = new JButton("Remover Compra");
 
         // Declaração do JSpinner
-        spinnerModel = new SpinnerNumberModel(0, 0, 100, 1);
+        spinnerModel = new SpinnerNumberModel(0, 0, Integer.parseInt(quantidadeAtual), 1);
         // Valor inicial, mínimo, máximo, passo
 
         qtdeSpinner = new JSpinner(spinnerModel);
@@ -142,23 +142,22 @@ private ProdutosDAO produtosDAO;
         tableProd.setPreferredScrollableViewportSize(new Dimension(320, 200)); // Largura 320, Altura 200
 
         //
-        new ProdutosDAO().criaTabela();
+        // new ProdutosDAO().criaTabela();
         atualizarTabela();
 
         // -------------------------------------------------------------------------------------------
 
         // Descrição
-        bottomPanel.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
         bottomPanel.setLayout(new BorderLayout());
         bottomPanel.add(descPanelTop, BorderLayout.NORTH);
         bottomPanel.add(descPanelBottom, BorderLayout.CENTER);
-        bottomPanel.setPreferredSize(new Dimension(180, 50));
+        // bottomPanel.setPreferredSize(new Dimension(180, 50));
 
         // Descrição TOP
         descPanelTop.setLayout(new BorderLayout());
 
         // Imagem
-        teste.setPreferredSize(new Dimension(50, 50));
+        teste.setPreferredSize(new Dimension(70, 100));
         teste.setBorder(BorderFactory.createLineBorder(Color.black, 1));
         descImgPanel.add(teste);
         descPanelTop.add(descImgPanel, BorderLayout.WEST);
@@ -225,11 +224,16 @@ private ProdutosDAO produtosDAO;
                     String nome = (String) tableProd.getValueAt(linhaSelecionada, 0);
                     String descricao = (String) tableProd.getValueAt(linhaSelecionada, 2);
                     String preco = (String) tableProd.getValueAt(linhaSelecionada, 3);
-                    String quantidade = (String) tableProd.getValueAt(linhaSelecionada, 4);
+                    quantidadeAtual = (String) tableProd.getValueAt(linhaSelecionada, 4);
 
                     nomeProd.setText("Nome: " + nome);
                     descProd.setText("Descrição: " + descricao);
                     precoProd.setText("Preço: R$ " + preco);
+                    // Atualiza o valor máximo do Spinner com a nova quantidade disponível
+                    spinnerModel.setMaximum(Integer.parseInt(quantidadeAtual));
+                    // Atualiza o valor atual do Spinner para zero
+                    spinnerModel.setValue(0);
+
                 }
             }
         });
@@ -245,19 +249,24 @@ private ProdutosDAO produtosDAO;
                     String nome = tableProd.getValueAt(linhaSelecionada, 0).toString();
                     String codigo = tableProd.getValueAt(linhaSelecionada, 1).toString();
 
-                   
                     // Obtém a quantidade desejada do JSpinner
                     int quantidadeSelecionada = (int) qtdeSpinner.getValue();
-                    int quantidadeAtual = produtosDAO.obterQuantidade(codigo);
-                    int novaQuantidade = quantidadeAtual-quantidadeSelecionada;
-                    // Atualiza a quantidade no banco de dados antes de adicionar ao carrinho
-                     new ProdutosDAO().atualizarQuantidade(codigo,
-                     String.valueOf(novaQuantidade));
+                    if (quantidadeSelecionada > 0) {
+                        int quantidadeAtual = produtosDAO.obterQuantidade(codigo);
+                        int novaQuantidade = quantidadeAtual - quantidadeSelecionada;
+                        // Atualiza a quantidade no banco de dados antes de adicionar ao carrinho
+                        new ProdutosDAO().atualizarQuantidade(codigo,
+                                String.valueOf(novaQuantidade));
 
-                    // Adiciona os dados à tabela do carrinho
-                    DefaultTableModel carrinhoTableModel = (DefaultTableModel) tableCompra.getModel();
-                    carrinhoTableModel.addRow(new Object[] { nome, codigo, quantidadeSelecionada });
-                    atualizarTabelaProd();
+                        // Adiciona os dados à tabela do carrinho
+                        DefaultTableModel carrinhoTableModel = (DefaultTableModel) tableCompra.getModel();
+                        carrinhoTableModel.addRow(new Object[] { nome, codigo, quantidadeSelecionada });
+                        atualizarTabelaProd();
+                    } else {
+                        JOptionPane.showMessageDialog(null,
+                                "Quantidade Inválida, por favor selecione uma quantidade válida.", "Aviso",
+                                JOptionPane.WARNING_MESSAGE);
+                    }
 
                 } else {
                     JOptionPane.showMessageDialog(null, "Selecione um produto para comprar.");
@@ -300,6 +309,13 @@ private ProdutosDAO produtosDAO;
             }
         });
 
+        removerCompraBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
     }
 
     private void atualizarTabela() {
@@ -307,13 +323,14 @@ private ProdutosDAO produtosDAO;
         produtos = new ProdutosDAO().listarTodos();
         for (Produtos produto : produtos) {
             // Adiciona os dados de cada carro como uma nova linha na tabela Swing
-            tableModelProd.addRow(new Object[] { produto.getNome(), produto.getCodigo(), produto.getDescricao(),
-                    produto.getPreco(), produto.getQuantidade() });
+            if (!(produto.getQuantidade().equals("0"))) {
+                tableModelProd.addRow(new Object[] { produto.getNome(), produto.getCodigo(), produto.getDescricao(),
+                        produto.getPreco(), produto.getQuantidade() });
+            }
         }
     }
 
     public void atualizarTabelaProd() {
         atualizarTabela();
     }
-
 }

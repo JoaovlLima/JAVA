@@ -49,13 +49,6 @@ public class ComprasController {
         return comprado;
     }
 
-    // public void imprimirProdutosNoCarrinho() {
-    //     System.out.println("Produtos no Carrinho:");
-    //     for (Compras compra : comprado) {
-    //         System.out.println("codigo: " + compra.getCodigo() + ", Quantidade: " + compra.getQuantidade());
-    //     }
-    // }
-
     public void atualizarQuantidadesNoBanco(String codigo) {
         try {
             // Obtendo a lista de produtos no carrinho
@@ -78,29 +71,21 @@ public class ComprasController {
                 int quantidadeAtual = produtosDAO.obterQuantidade(codigoProduto);
 
                 // Verifica se há estoque suficiente para a compra
-                if (quantidadeComprada != 0) {
-                    if (quantidadeAtual >= quantidadeComprada) {
-                        int novaQuantidade = quantidadeAtual - quantidadeComprada;
+                if (quantidadeAtual >= quantidadeComprada) {
+                    int novaQuantidade = quantidadeAtual - quantidadeComprada;
 
-                        // // Atualiza a quantidade no banco de dados
-                        produtosDAO.atualizarQuantidade(codigoProduto,
-                                String.valueOf(novaQuantidade));
-                    } else {
-                        System.out.println("Estoque insuficiente para o produto: " + codigoProduto);
-                        // // Lógica para lidar com estoque insuficiente, se necessário
-                    }
-                } else {
-                    throw new QuantityFormatExeception("Quantidade inválidada, por favor selecione um valor válido");
+                    // // Atualiza a quantidade no banco de dados
+                    produtosDAO.atualizarQuantidade(codigoProduto,
+                            String.valueOf(novaQuantidade));
                 }
             }
 
             ComprasPainel comprasPainel = new ComprasPainel(); // Instancia a classe ComprasPainel (ou use a instância
                                                                // existente, se aplicável)
             comprasPainel.atualizarTabelaProd(); // Chama o método para atualizar a tabela na classe ComprasPainel
-        } catch (QuantityFormatExeception ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "Aviso", JOptionPane.WARNING_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Erro não identificado.", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
 
     }
-
 }
