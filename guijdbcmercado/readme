@@ -1,6 +1,6 @@
-<h1>Documentação do Projeto de Java para o Mercado</h1>
+Documentação do Projeto de Java para o Mercado
 
-<h2>Frame Compras</h2>
+Frame Compras
 Este frame parece ser responsável por exibir uma lista de produtos disponíveis para compra e permitir que o usuário adicione produtos a um carrinho de compras. Algumas funcionalidades notáveis incluem:
 
 Exibição de uma tabela com detalhes dos produtos disponíveis.
@@ -11,30 +11,29 @@ Lógica para atualizar a quantidade de produtos no banco de dados após a finali
 Considerações para clientes VIP, onde um sistema de desconto pode ser implementado.
 
 
-<h2>Frame ClientesVip</h2>
+Frame ClientesVip
 Este frame está relacionado ao gerenciamento de clientes VIP. Algumas características incluem:
 
 Exibição de uma lista de clientes VIP em uma tabela.
 Funcionalidades para cadastrar, atualizar e apagar clientes VIP.
 Interface que permite a manipulação dos dados do cliente VIP, como nome e CPF.
 
-<h2>Frame Produtos</h2>
+Frame Produtos
 Este frame trata das operações relacionadas aos produtos disponíveis. Suas funcionalidades são:
 
 Exibição de uma tabela com detalhes dos produtos, como nome, código, descrição, preço e quantidade.
 Funcionalidades para cadastrar, atualizar e apagar produtos.
 Lógica para obter e atualizar a quantidade de produtos no banco de dados.
 
-<h2>Frame ComprasController</h2>
+Frame ComprasController
 Embora não seja exatamente um frame, parece ser uma classe responsável por controlar as operações relacionadas ao carrinho de compras. Algumas funcionalidades incluem:
 
 <h2>Adicionar produtos ao carrinho.</h2>
 Visualizar e imprimir os produtos no carrinho.
 Atualizar as quantidades de produtos no banco de dados após a compra.
 
-<hr>
 
-<h2>Considerações Gerais</h2>
+Considerações Gerais
 Os códigos incluem interações com um banco de dados para persistência dos dados relacionados a clientes, produtos e compras.
 Utilização de conexões seguras e parametrizadas para evitar injeção de SQL.
 Manipulação de tabelas no banco de dados para criar, listar, atualizar e apagar registros.
