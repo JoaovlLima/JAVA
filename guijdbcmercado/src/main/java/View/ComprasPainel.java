@@ -67,7 +67,7 @@ public class ComprasPainel extends JPanel {
     private int linhaSelecionadaComp = -1;
 
     // Outras Variaveis
-    private String total = "00,00";
+    private double total = 0;
     private String quantidadeAtual = "0";
     private String quantidadeComprada = "0";
     private ComprasController novaCompra;
@@ -145,7 +145,6 @@ public class ComprasPainel extends JPanel {
         //
         // new ProdutosDAO().criaTabela();
         atualizarTabela();
-
         // -------------------------------------------------------------------------------------------
 
         // Descrição
@@ -245,12 +244,8 @@ public class ComprasPainel extends JPanel {
                 if (linhaSelecionadaComp != -1) {
                     String nome = (String) tableCompra.getValueAt(linhaSelecionadaComp, 0);
                     String codigo = (String) tableCompra.getValueAt(linhaSelecionadaComp, 1);
-                    quantidadeComprada = (String) tableCompra.getValueAt(linhaSelecionadaComp, 2);
-
-                   
-                   
+                    quantidadeComprada = tableCompra.getValueAt(linhaSelecionadaComp, 2).toString();
                     
-
                 }
             }
         });
@@ -279,6 +274,7 @@ public class ComprasPainel extends JPanel {
                         DefaultTableModel carrinhoTableModel = (DefaultTableModel) tableCompra.getModel();
                         carrinhoTableModel.addRow(new Object[] { nome, codigo, quantidadeSelecionada });
                         atualizarTabelaProd();
+                        calcTotal();
                     } else {
                         JOptionPane.showMessageDialog(null,
                                 "Quantidade Inválida, por favor selecione uma quantidade válida.", "Aviso",
@@ -329,20 +325,23 @@ public class ComprasPainel extends JPanel {
         removerCompraBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            int linhaSelecionadaComp = tableCompra.getSelectedRow();
+                int linhaSelecionadaComp = tableCompra.getSelectedRow();
 
-            if (linhaSelecionada != -1) {
+                if (linhaSelecionadaComp != -1) {
                     // Obtém os dados da linha selecionada na tabela de produtos
-                    String nome = tableCompra.getValueAt(linhaSelecionada, 0).toString();
-                    String codigo = tableCompra.getValueAt(linhaSelecionada, 1).toString();
-                    quantidadeComprada = (String) tableCompra.getValueAt(linhaSelecionadaComp, 2);
-                     int quantidadeAtualRemove = produtosDAO.obterQuantidade(codigo);
+                    String nome = tableCompra.getValueAt(linhaSelecionadaComp, 0).toString();
+                    String codigo = tableCompra.getValueAt(linhaSelecionadaComp, 1).toString();
+
+                    int quantidadeAtualRemove = produtosDAO.obterQuantidade(codigo);
                     int novaQuatidadeRemove = quantidadeAtualRemove + Integer.parseInt(quantidadeComprada);
                     new ProdutosDAO().atualizarQuantidade(codigo,
-                                String.valueOf(novaQuatidadeRemove));
-             DefaultTableModel carrinhoTableModel = (DefaultTableModel) tableCompra.getModel();
-                        carrinhoTableModel.removeRow(linhaSelecionadaComp);
-            }else {System.out.println("selecione para continuar");}
+                            String.valueOf(novaQuatidadeRemove));
+                    DefaultTableModel carrinhoTableModel = (DefaultTableModel) tableCompra.getModel();
+                    carrinhoTableModel.removeRow(linhaSelecionadaComp);
+                    atualizarTabelaProd();
+                } else {
+                    System.out.println("selecione para continuar");
+                }
             }
         });
 
@@ -358,6 +357,29 @@ public class ComprasPainel extends JPanel {
                         produto.getPreco(), produto.getQuantidade() });
             }
         }
+    }
+
+    private void calcTotal() {
+        int linhas = tableCompra.getRowCount();
+
+        for (int i = 0; i < linhas; i++) {
+            String codigo = (String) tableCompra.getValueAt(i, 1); // Obtém o código da linha
+            int quantidade = Integer.parseInt(tableCompra.getValueAt(i, 2).toString()); // Obtém a quantidade da linha
+
+            // Encontra o produto correspondente ao código na lista de produtos
+            for (Produtos produto : produtos) {
+                if (produto.getCodigo().equals(codigo)) { // Verifica se o código corresponde
+                    double preco = Double.parseDouble(produto.getPreco()); // Converte o preço para double
+                    System.out.println(preco);
+                    // Calcula o valor comprado para este produto e adiciona ao total
+                    double valorComprado = preco * quantidade;
+                    total += valorComprado;
+                    break; // Sai do loop assim que encontrar o produto correspondente ao código
+                }
+            }
+
+        }
+        valorTotal.setText("Valor Total: R$ " + total); // Define o valor total depois de calcular
     }
 
     public void atualizarTabelaProd() {
