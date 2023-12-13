@@ -64,11 +64,12 @@ public class ComprasPainel extends JPanel {
     private DefaultTableModel tableModelProd;
     private DefaultTableModel tableModelCar;
     private int linhaSelecionada = -1;
+    private int linhaSelecionadaComp = -1;
 
     // Outras Variaveis
     private String total = "00,00";
     private String quantidadeAtual = "0";
-
+    private String quantidadeComprada = "0";
     private ComprasController novaCompra;
 
     public ComprasPainel() {
@@ -237,6 +238,22 @@ public class ComprasPainel extends JPanel {
                 }
             }
         });
+        tableCompra.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                linhaSelecionadaComp = tableCompra.rowAtPoint(evt.getPoint());
+                if (linhaSelecionadaComp != -1) {
+                    String nome = (String) tableCompra.getValueAt(linhaSelecionadaComp, 0);
+                    String codigo = (String) tableCompra.getValueAt(linhaSelecionadaComp, 1);
+                    quantidadeComprada = (String) tableCompra.getValueAt(linhaSelecionadaComp, 2);
+
+                   
+                   
+                    
+
+                }
+            }
+        });
 
         comprarBtn.addActionListener(new ActionListener() {
             @Override
@@ -312,7 +329,20 @@ public class ComprasPainel extends JPanel {
         removerCompraBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+            int linhaSelecionadaComp = tableCompra.getSelectedRow();
 
+            if (linhaSelecionada != -1) {
+                    // Obtém os dados da linha selecionada na tabela de produtos
+                    String nome = tableCompra.getValueAt(linhaSelecionada, 0).toString();
+                    String codigo = tableCompra.getValueAt(linhaSelecionada, 1).toString();
+                    quantidadeComprada = (String) tableCompra.getValueAt(linhaSelecionadaComp, 2);
+                     int quantidadeAtualRemove = produtosDAO.obterQuantidade(codigo);
+                    int novaQuatidadeRemove = quantidadeAtualRemove + Integer.parseInt(quantidadeComprada);
+                    new ProdutosDAO().atualizarQuantidade(codigo,
+                                String.valueOf(novaQuatidadeRemove));
+             DefaultTableModel carrinhoTableModel = (DefaultTableModel) tableCompra.getModel();
+                        carrinhoTableModel.removeRow(linhaSelecionadaComp);
+            }else {System.out.println("selecione para continuar");}
             }
         });
 
