@@ -28,7 +28,7 @@ Lógica para obter e atualizar a quantidade de produtos no banco de dados.
 Frame ComprasController
 Embora não seja exatamente um frame, parece ser uma classe responsável por controlar as operações relacionadas ao carrinho de compras. Algumas funcionalidades incluem:
 
-<h2>Adicionar produtos ao carrinho.</h2>
+Adicionar produtos ao carrinho.
 Visualizar e imprimir os produtos no carrinho.
 Atualizar as quantidades de produtos no banco de dados após a compra.
 
