@@ -29,19 +29,26 @@ public class JanelaPrincipal extends JFrame {
             painelRei.add("Compras", tab1);
         } else {
             clientes = new ClientesVipDAO().listarTodos();
-            for (ClientesVip cliente : clientes) {
+            boolean clienteVipCheck = false;
+            boolean cpfCorreto = false;
+
+            while (!clienteVipCheck) {
                 String cpf = JOptionPane.showInputDialog(null, "Informe o CPF:");
                 String cpfFormatado = formatarCPF(cpf);
 
-                while (!cpfCorreto) {
+                for (ClientesVip cliente : clientes) {
                     if (cpfFormatado.equals(cliente.getCpf())) {
                         JOptionPane.showMessageDialog(null, "Bem vindo " + cliente.getNome() + "!");
                         clienteVipCheck = true;
                         painelRei.add("Compras", tab1);
                         cpfCorreto = true;
-                    } else {
-                        JOptionPane.showMessageDialog(null,"CPF Incorreto, por favor digite novamente","Aviso",JOptionPane.WARNING_MESSAGE);
+                        break; // Sair do loop assim que encontrar o cliente
                     }
+                }
+
+                if (!cpfCorreto) {
+                    JOptionPane.showMessageDialog(null, "CPF Incorreto, por favor digite novamente", "Aviso",
+                            JOptionPane.WARNING_MESSAGE);
                 }
             }
         }
