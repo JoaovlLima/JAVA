@@ -54,7 +54,11 @@ private void atualizarTabelaTarefa(){
     tableModel.setRowCount(0);
     tarefas = new ListDAO().listarTodos();
     for (Tarefas tarefa : tarefas) {
-        tableModel.addRow(new Object[]{tarefa.getTarefas()});
+        if(tarefa.isConcluida() == true)
+    tableModel.addRow(new Object[] { tarefa.getTarefas(), "true"  });
+    else{
+        tableModel.addRow(new Object[] { tarefa.getTarefas(), "false"  });
+    }
     }
 
 
@@ -63,16 +67,16 @@ public void cadastrar(String tarefas, Boolean situacao ){
     new ListDAO().cadastrar(tarefas, situacao);
     atualizarTabelaTarefa();
 }
-public void apagar(String placa){
-    new ListDAO().apagar(placa);
+public void apagar(String tarefas){
+    new ListDAO().apagar(tarefas);
     atualizarTabelaTarefa();
 }
 
-/* public void atualizar(String tarefas, Boolean situacao){
+public void atualizar(String tarefas, Boolean situacao){
     new ListDAO().atualizar(tarefas,situacao);
     atualizarTabelaTarefa();
-} */
-public void limpar(String Marca, String Modelo, String ano,String placa, String Valor){
+}
+public void limpar(String tarefas, boolean situacao){
   
     atualizarTabelaTarefa();
 }

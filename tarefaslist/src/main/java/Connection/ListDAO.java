@@ -22,7 +22,7 @@ public class ListDAO {
 
     // criar Tabela
     public void criaTabela() {
-        String sql = "CREATE TABLE IF NOT EXISTS Tarefas (tarefa VARCHAR (255), situacao BOOLEAN )";
+        String sql = "CREATE TABLE IF NOT EXISTS Tarefas (tarefa VARCHAR (255), concluida BOOLEAN )";
         try (Statement stmt = this.connection.createStatement()) {
             stmt.execute(sql);
             System.out.println("Tabela criada com sucesso.");
@@ -46,8 +46,8 @@ public List<Tarefas> listarTodos() {
         while (rs.next()) {
             Tarefas tarefa = new Tarefas(
                     rs.getString("tarefa"),
-                    rs.getBoolean("Situação"));
-            tarefasList.add(tarefa); // Corrigido para adicionar à lista clientesVip
+                    rs.getBoolean("concluida"));
+            tarefasList.add(tarefa);
         }
     } catch (SQLException ex) {
         System.out.println(ex);
@@ -58,14 +58,14 @@ public List<Tarefas> listarTodos() {
 }
 
 // Cadastrar Carro no banco
-public void cadastrar(String tarefas, boolean situacao) {
+public void cadastrar(String tarefas, boolean concluida) {
     PreparedStatement stmt = null;
     // Define a instrução SQL parametrizada para cadastrar na tabela
-    String sql = "INSERT INTO Tarefas (tarefa, situacao) VALUES (?, ?)";
+    String sql = "INSERT INTO Tarefas (tarefa, concluida) VALUES (?, ?)";
     try {
         stmt = connection.prepareStatement(sql);
         stmt.setString(1, tarefas);
-        stmt.setBoolean(2, situacao);
+        stmt.setBoolean(2, concluida);
         stmt.executeUpdate();
         System.out.println("Dados inseridos com sucesso");
     } catch (SQLException e) {
@@ -76,13 +76,13 @@ public void cadastrar(String tarefas, boolean situacao) {
 }
 
 // Atualizar dados no banco
-public void Atualizar(String tarefas, Boolean situacao) {
+public void atualizar(String tarefas, Boolean concluida) {
     PreparedStatement stmt = null;
     // Define a instrução SQL parametrizada para atualizar dados pela tarefa
-    String sql = "UPDATE Tarefas SET situacao = ? WHERE tarefa = ?";
+    String sql = "UPDATE Tarefas SET concluida = ? WHERE tarefa = ?";
     try {
         stmt = connection.prepareStatement(sql);
-        stmt.setBoolean(1, situacao);
+        stmt.setBoolean(1, concluida);
         stmt.setString(2, tarefas);
         stmt.executeUpdate();
         System.out.println("Dados atualizados com sucesso");

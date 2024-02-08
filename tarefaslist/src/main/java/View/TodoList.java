@@ -11,9 +11,13 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 import Connection.ListDAO;
+import Controller.TarefasController;
+import Model.Tarefas;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -24,13 +28,17 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 //Criação da classe, sendo uma extensão de JFrame
 public class TodoList extends JFrame { // Extends significa fazer uma subclasse de JFrame
 
     // ATRIBUTOS
     private JPanel mainPanel;
-    private JTextField taskInputField;
+    private JTextField taskInputField, situacaoField;
     private JButton addButton;
 
     // Componenetes novos
@@ -41,11 +49,14 @@ public class TodoList extends JFrame { // Extends significa fazer uma subclasse 
     private JList<String> taskList; // JList é uma lista grafica, no caso pega so elementos da classe Task lá em
                                     // baixo
     private DefaultListModel<String> listModel;
-
+    private List<Tarefas> tarefas;
     private JButton deleteButton;
     private JButton markDoneButton;
     private JComboBox<String> filterComboBox;
     private JButton clearCompletedButton;
+    private JTable table;
+    private DefaultTableModel tableModel;
+    private int linhaSelecionada = -1;
 
     private List<Task> tasks;// Interface de Arraylist, não é possível instanciar deve ser usado o Arraylist
     
@@ -69,6 +80,7 @@ public class TodoList extends JFrame { // Extends significa fazer uma subclasse 
 
         // Inicializa campos de entrada, botões e JComboBox
         taskInputField = new JTextField();
+        
         addButton = new JButton("Adicionar");
         deleteButton = new JButton("Excluir");
         markDoneButton = new JButton("Concluir");
@@ -89,12 +101,17 @@ public class TodoList extends JFrame { // Extends significa fazer uma subclasse 
 
         // Adiciona os componentes ao painel principal
         mainPanel.add(inputPanel, BorderLayout.NORTH);
-        mainPanel.add(new JScrollPane(taskList), BorderLayout.CENTER);// ScrollPane, é baseada na taskList
+       JScrollPane jSPane = new JScrollPane();
+        add(jSPane);
+        tableModel = new DefaultTableModel(new Object[][] {},
+                new String[] { "Tarefa", "Cocluida" });
+        table = new JTable(tableModel);
+        jSPane.setViewportView(table);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         // Adiciona o painel principal à janela
         this.add(mainPanel);
-
+        mainPanel.add(jSPane);
 
         // Fazendo o tratamento de eventos com o metodo Handler
         Handler hand = new Handler(); // Criação de uma obj Handler
@@ -106,9 +123,56 @@ public class TodoList extends JFrame { // Extends significa fazer uma subclasse 
         taskList.addMouseListener(hand);
         taskInputField.addKeyListener(hand);
 
+        new ListDAO().criaTabela();
+          atualizarTabela();
+
+        TarefasController operacoes = new TarefasController(tarefas, tableModel, table);
+
+
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                linhaSelecionada = table.rowAtPoint(evt.getPoint());
+                if(linhaSelecionada != -1){
+                    taskInputField.setText((String) table.getValueAt(linhaSelecionada,0)) ;
+                    
+                }
+            }
+        });
+
+        addButton.addActionListener(e->{
+     
+            operacoes.cadastrar(taskInputField.getText(), false );
+            taskInputField.setText("");
+        
+        });
+
+        markDoneButton.addActionListener(e->{
+                
+            operacoes.atualizar(taskInputField.getText(),true);
+            
+            taskInputField.setText("");
+            
+           
+        });
+
+        deleteButton.addActionListener(e->{
+   
+            int validacao = JOptionPane.showConfirmDialog(null,"Dejesa realmente EXCLUIR?","Confirme",JOptionPane.YES_NO_OPTION);
+            if(validacao == JOptionPane.YES_NO_OPTION){
+        
+            operacoes.apagar(taskInputField.getText());
+            
+            taskInputField.setText("");
+           
+            }else{
+        
+            }
+            
+        });
         // TRATAMENTO DE EVENTOS
         addButton.addActionListener(e -> {
-            addTask(); // Chama o metodo addTask
+            // Chama o metodo addTask
         });
         deleteButton.addActionListener(e -> {
             deleteTask();
@@ -127,8 +191,7 @@ public class TodoList extends JFrame { // Extends significa fazer uma subclasse 
 
         });
 
-        new ListDAO().criaTabela();
-            
+        
 
 
     }
@@ -188,7 +251,7 @@ public class TodoList extends JFrame { // Extends significa fazer uma subclasse 
                 // Chama o metodo addTask.
                 try {
                     if (!taskInputField.getText().isEmpty()) {
-                        addTask();
+                       
                     }
 
                 } catch (Exception f) {
@@ -255,24 +318,7 @@ public class TodoList extends JFrame { // Extends significa fazer uma subclasse 
     // FUNÇÕES
 
     // CREATE, C DO CRUD
-    private void addTask() {
-        // Adiciona uma nova task à lista de tasks
-        int funciona; // Variavel criada para receber valor do JOptionPane
-        funciona = JOptionPane.showConfirmDialog(null, "Deseja realmente adicionar tarefa:");
-        // Para funcionar tanto no apertar do botão quanto para ao pressionar a tecla
-        // ENTER
-        if (funciona == JOptionPane.YES_OPTION) { // Se a escolha for SIM
-            String taskDescription = taskInputField.getText().trim();// TRIM = remove espaços vazios
-            if (!taskDescription.isEmpty()) { //Se estiver diferente de vazio
-                Task newTask = new Task(taskDescription);
-                tasks.add(newTask); //Adicionando novas tarefas ao Array
-                updateTaskList();// Chama o outro metodo
-                taskInputField.setText("");
-            }
-        } else if (funciona == JOptionPane.NO_OPTION) { // Se a escolha for NÃO
-            taskInputField.setText("");
-        } // Se a escolha for CANCEL o JOption ira apenas fechar.
-    }
+    
 
     // DELETE, D DO CRUD
     private void deleteTask() {
@@ -285,7 +331,7 @@ public class TodoList extends JFrame { // Extends significa fazer uma subclasse 
         } // Pega o index da tarefa que esta selecionado
         if (selectedIndex >= 0 && selectedIndex < tasks.size()) { // Vê se ela existe
             tasks.remove(selectedIndex); // tasks é o meu Arraylist
-            updateTaskList(); // Atualiza o Scroll
+            // Atualiza o Scroll
         }
     }
 
@@ -296,7 +342,7 @@ public class TodoList extends JFrame { // Extends significa fazer uma subclasse 
         if (selectedIndex >= 0 && selectedIndex < tasks.size()) {
             Task task = tasks.get(selectedIndex); // Pegou o elemento do arraylist
             task.setDone(true); // Usando o Setters do outro metodo
-            updateTaskList(); // Atualiza a tasklist
+             // Atualiza a tasklist
         }
     }
 
@@ -323,23 +369,22 @@ public class TodoList extends JFrame { // Extends significa fazer uma subclasse 
             }
         }
         tasks.removeAll(completedTasks);
-        updateTaskList();
+       
     }
 
-    private void updateTaskList() {
-        // Atualiza a lista de tasks exibida na GUI
-        listModel.clear();
-        for (Task task : tasks) {
-            if (task.isDone()) {
-                listModel
-                        .addElement("<html><font color='green'>" + task.getDescription() + "(Concluida)</font></html>");
-            } else {
-                listModel.addElement(task.getDescription());
-            }
-            // listModel é a lista simplificada chamado ternário
-
+    private void atualizarTabela(){
+        tableModel.setRowCount(0);
+        tarefas = new ListDAO().listarTodos();
+        for (Tarefas tarefa : tarefas) {
+            // Adiciona os dados de cada carro como uma nova linha na tabela Swing
+            if(tarefa.isConcluida() == true)
+    tableModel.addRow(new Object[] { tarefa.getTarefas(), "true"  });
+    else{
+        tableModel.addRow(new Object[] { tarefa.getTarefas(), "false"  });
+    }
         }
-    }
+        }
+    
 
     public void run() {
         this.setVisible(true);

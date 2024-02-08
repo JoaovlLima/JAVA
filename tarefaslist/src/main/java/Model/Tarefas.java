@@ -2,11 +2,11 @@ package Model;
 
 public class Tarefas {
     private String tarefas;
-    private boolean situacao;
+    private boolean concluida;
     
-    public Tarefas(String tarefas, boolean situacao) {
+    public Tarefas(String tarefas, boolean concluida) {
         this.tarefas = tarefas;
-        this.situacao = situacao;
+        this.concluida = concluida;
     }
 
     public String getTarefas() {
@@ -17,12 +17,12 @@ public class Tarefas {
         this.tarefas = tarefas;
     }
 
-    public boolean isSituacao() {
-        return situacao;
+    public boolean isConcluida() {
+        return concluida;
     }
 
-    public void setSituacao(boolean situacao) {
-        this.situacao = situacao;
+    public void setConcluida(boolean concluida) {
+        this.concluida = concluida;
     }
     
 
